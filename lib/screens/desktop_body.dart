@@ -37,7 +37,7 @@ class _MyDesktopBodyState extends State<MyDesktopBody> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     color: themenotifier.isDark
-                        ? AppColors().darkTheme.canvasColor
+                        ? AppColors().darkCard
                         : Colors.deepPurple[300],
                     child: Padding(
                       padding: const EdgeInsets.all(8),

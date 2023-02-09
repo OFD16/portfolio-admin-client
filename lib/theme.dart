@@ -9,6 +9,12 @@ class AppColors {
     primaryColor: Colors.black,
     brightness: Brightness.dark,
     dividerColor: Colors.white30,
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: TextStyle(
+        color: Colors.white
+      ),
+      filled: true,
+        fillColor: Color(0xff3f3e3e),)
   );
 
   final lightTheme = ThemeData(
@@ -31,6 +37,8 @@ class AppColors {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+        fillColor: Colors.deepPurple[400],
         focusColor: Colors.purple[800],
         hoverColor: Colors.purple[800],
         focusedBorder: UnderlineInputBorder(

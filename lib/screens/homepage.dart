@@ -6,7 +6,7 @@ import 'package:admin_client_portfolio/screens/post/create_post.dart';
 import 'package:admin_client_portfolio/screens/post/detail_post.dart';
 import 'package:admin_client_portfolio/screens/post/list_post.dart';
 import 'package:admin_client_portfolio/screens/profile/profile.dart';
-import 'package:admin_client_portfolio/screens/project/create_paragraph.dart';
+import 'package:admin_client_portfolio/screens/project/paragraph_detail.dart';
 import 'package:admin_client_portfolio/screens/project/create_project.dart';
 import 'package:admin_client_portfolio/screens/project/detail_project.dart';
 import 'package:admin_client_portfolio/screens/project/list_project.dart';

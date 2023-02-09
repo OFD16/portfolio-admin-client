@@ -21,7 +21,7 @@ class _ImageCardState extends State<ImageCard> {
           borderRadius: BorderRadius.circular(8),
             color: isDark ? Colors.grey : Colors.purple[800],
         ),
-        child: Icon(Icons.verified),
+        child: const Icon(Icons.verified),
       ),
     );
 

@@ -10,23 +10,39 @@ class ParagraphPage extends StatefulWidget {
   State<ParagraphPage> createState() => _ParagraphPageState();
 }
 
-TextEditingController firstVideoLinkC = TextEditingController();
-TextEditingController firstImgLinkC = TextEditingController();
-TextEditingController leftImgLinkC = TextEditingController();
-TextEditingController paragraphC = TextEditingController();
-TextEditingController rightImgLinkC = TextEditingController();
-TextEditingController lastImgLinkC = TextEditingController();
-TextEditingController lastVideoLinkC = TextEditingController();
-
 class _ParagraphPageState extends State<ParagraphPage> {
   @override
   Widget build(BuildContext context) {
-    final Paragraph paragraphInstance = Paragraph();
+    List paragraphsList = Provider.of<States>(context).paragraphsList;
+    Function clearParagraphInstance = Provider.of<States>(context).clearParagraphInstance;
+    Paragraph paragraphInstance = Provider.of<States>(context).paragraphInstance;
     Function addParagraph = Provider.of<States>(context).addParagraph;
+    Function deleteParagraph = Provider.of<States>(context).deleteParagraph;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
+
+
+    TextEditingController firstVideoLinkC = TextEditingController(text: paragraphInstance.firstVideo);
+    TextEditingController firstImgLinkC = TextEditingController(text: paragraphInstance.firstImg);
+    TextEditingController leftImgLinkC = TextEditingController(text: paragraphInstance.leftImg);
+    TextEditingController paragraphC = TextEditingController(text: paragraphInstance.paragraphText);
+    TextEditingController rightImgLinkC = TextEditingController(text: paragraphInstance.rightImg);
+    TextEditingController lastImgLinkC = TextEditingController(text: paragraphInstance.lastImg);
+    TextEditingController lastVideoLinkC = TextEditingController(text: paragraphInstance.lastVideo);
+
     return ListView(
       children: [
-        Text('Paragraf: '),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Paragraf: '),
+            Row(
+              children: [
+                IconButton(onPressed: ()=>{deleteParagraph(paragraphInstance), clearParagraphInstance(),setIndexContent(3), print('silinen paragprah: ${paragraphInstance}')}, icon: const Icon(Icons.delete)),
+                IconButton(onPressed: ()=>{setIndexContent(3)}, icon: const Icon(Icons.arrow_back)),
+              ],
+            )
+          ],
+        ),
         TextFormField(
           decoration: const InputDecoration(
             labelText: "Üst Video Linki: ",
@@ -52,6 +68,8 @@ class _ParagraphPageState extends State<ParagraphPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          minLines: 10,
+          maxLines: 40,
           decoration: const InputDecoration(
             labelText: "Paragraf: ",
             hintText: "Loream ipsum...",
@@ -88,9 +106,7 @@ class _ParagraphPageState extends State<ParagraphPage> {
             paragraphInstance.firstVideo = firstVideoLinkC.text,
             paragraphInstance.firstImg = firstImgLinkC.text,
             paragraphInstance.leftImg = leftImgLinkC.text,
-            print('paragraf: ${paragraphInstance.paragraphText}'),
             paragraphInstance.paragraphText = paragraphC.text,
-            print('paragraf: ${paragraphInstance.paragraphText}'),
             paragraphInstance.rightImg = rightImgLinkC.text,
             paragraphInstance.lastImg = lastImgLinkC.text,
             paragraphInstance.lastVideo = lastVideoLinkC.text,
