@@ -1,3 +1,8 @@
+import 'package:admin_client_portfolio/models/education_model.dart';
+import 'package:admin_client_portfolio/models/experience_model.dart';
+import 'package:admin_client_portfolio/models/medias_model.dart';
+import 'package:admin_client_portfolio/models/skill_model.dart';
+
 class User {
   int id;
   String firstName;
@@ -7,12 +12,12 @@ class User {
   String userImg;
   Map<dynamic, String> socialLinks;
   String introduction;
-  Map<dynamic, List<String>> medias;
+  Medias medias;
   List<int> markedProjects;
   List<int> markedBlogs;
-  List<Map<dynamic,String>> experiences;
-  List<Map<dynamic,String>> education;
-  List<Map<dynamic,String>> skills;
+  List<Experience> experiences;
+  List<Education> education;
+  List<Skill> skills;
   String role;
 
   User(
@@ -43,12 +48,12 @@ class User {
     userImg: json["user_image"] as String,
     socialLinks: json["social_links"] as Map<dynamic, String>,
     introduction: json["introduction"] as String,
-    medias: json["medias"] as Map<dynamic, List<String>>,
+    medias: json["medias"] as Medias,
     markedProjects: json["marked_projects"] as List<int>,
     markedBlogs: json["marked_blogs"] as List<int>,
-    experiences: json["experiences"] as List<Map<dynamic,String>>,
-    education: json["education"] as List<Map<dynamic,String>>,
-    skills: json["skills"] as List<Map<dynamic,String>>,
+    experiences: json["experiences"] as List<Experience>,
+    education: json["education"] as List<Education>,
+    skills: json["skills"] as List<Skill>,
     role: json["role"] as String,
   );
 

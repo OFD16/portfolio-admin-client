@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:admin_client_portfolio/models/medias_model.dart';
+
 class Post {
   int id;
   String postName;
@@ -5,8 +9,8 @@ class Post {
   String postTitle;
   String introImg;
   String postIntro;
-  List<Map<dynamic, String>> paragraphs;
-  Map<dynamic, List<String>> medias;
+  List<Paragraph> paragraphs;
+  Medias medias;
   int postOwner;
   List<String> links;
 
@@ -31,8 +35,8 @@ class Post {
     postTitle: json["post_title"] as String,
     introImg: json["intro_image"] as String,
     postIntro: json["post_intro"] as String,
-    paragraphs: json["paragraphs"] as List<Map<dynamic, String>>,
-    medias: json["medias"] as Map<dynamic, List<String>>,
+    paragraphs: json["paragraphs"] as List<Paragraph>,
+    medias: json["medias"] as Medias,
     postOwner: json["post_owner"] as int,
     links: json["links"] as List<String>,
   );

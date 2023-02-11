@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:admin_client_portfolio/models/medias_model.dart';
+
 class Project {
   int id;
   String projectName;
@@ -5,8 +9,8 @@ class Project {
   String projectTitle;
   String introImg;
   String projectIntro;
-  List<Map<dynamic, String>> paragraphs;
-  Map<dynamic, List<String>> medias;
+  List<Paragraph> paragraphs;
+  Medias medias;
   List<String> members;
   List<String> links;
 
@@ -31,8 +35,8 @@ class Project {
     projectTitle: json["project_title"] as String,
     introImg: json["intro_image"] as String,
     projectIntro: json["project_intro"] as String,
-    paragraphs: json["paragraphs"] as List<Map<dynamic, String>>,
-    medias: json["medias"] as Map<dynamic, List<String>>,
+    paragraphs: json["paragraphs"] as List<Paragraph>,
+    medias: json["medias"] as Medias,
     members: json["members"] as List<String>,
     links: json["links"] as List<String>,
   );

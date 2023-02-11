@@ -47,6 +47,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: ListView(
                 children: [
                   ExpansionPanelList(
+                    dividerColor: Colors.transparent,
+                    elevation: 0,
                     expansionCallback: (i, isOpen) => setState(() {
                       _isOpen[i] = !isOpen;
                     }),

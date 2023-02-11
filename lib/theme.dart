@@ -18,6 +18,12 @@ class AppColors {
   );
 
   final lightTheme = ThemeData(
+    dialogBackgroundColor: Colors.deepPurple[200],
+    chipTheme: ChipThemeData(
+      labelStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.deepPurple[400],
+      shadowColor: Colors.deepPurple[800],
+    ),
     cardTheme: CardTheme(
       color: Colors.purple[800],
     ),

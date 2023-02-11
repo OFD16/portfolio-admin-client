@@ -39,20 +39,16 @@ class _EditParagraphState extends State<EditParagraph> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(
+                onPressed: () => {setIndexContent(3)},
+                icon: const Icon(Icons.arrow_back)),
             const Text('Paragraf Düzenle: '),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () => {
-                          deleteParagraph(currentParagraph),
-                          setIndexContent(3)
-                        },
-                    icon: const Icon(Icons.delete)),
-                IconButton(
-                    onPressed: () => {setIndexContent(3)},
-                    icon: const Icon(Icons.arrow_back)),
-              ],
-            )
+            IconButton(
+                onPressed: () => {
+                  deleteParagraph(currentParagraph),
+                  setIndexContent(3)
+                },
+                icon: const Icon(Icons.delete)),
           ],
         ),
         TextFormField(
