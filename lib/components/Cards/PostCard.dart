@@ -32,7 +32,7 @@ class _PostCardState extends State<PostCard> {
               flex: 8,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(9), // Image border
-                child: Image.network(widget.image, fit: BoxFit.cover),
+                child: Image.network(widget.image == null ? widget.image : "https://cdn-icons-png.flaticon.com/512/4661/4661361.png", fit: BoxFit.cover),
               ),
             ),
             Expanded(

@@ -38,13 +38,17 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     Function addMember = Provider.of<States>(context).addMember;
     Function updateMember = Provider.of<States>(context).updateMember;
     Function deleteMember = Provider.of<States>(context).deleteMember;
+    Function clearMembers = Provider.of<States>(context).clearMembers;
 
     List<String> linksList = Provider.of<States>(context).linksList;
     Function addLink = Provider.of<States>(context).addLink;
     Function updateLink = Provider.of<States>(context).updateLink;
     Function deleteLink = Provider.of<States>(context).deleteLink;
+    Function clearLinks = Provider.of<States>(context).clearLinks;
 
     List<Paragraph> paragraphsList = Provider.of<States>(context).paragraphsList;
+    Function clearParagraphs = Provider.of<States>(context).clearParagraphs;
+
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     double width = MediaQuery.of(context).size.width;
 
@@ -289,7 +293,16 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             newProject.members = membersList,
             newProject.links = linksList,
             addProject(newProject),
-            Navigator.pushReplacementNamed(context, 'home_view')
+            setIndexContent(2),
+            //Sayfadan çıktıktna sonra içeriğini temizleme
+            projectNameController.text = "",
+            projectTypeController.text = "",
+            projectTitleController.text = "",
+            projectIntroImageController.text = "",
+            projectIntroTextController.text = "",
+            clearParagraphs(),
+            clearMembers(),
+            clearLinks(),
           },
           child: const Text('Projeyi Oluştur'),
         ),

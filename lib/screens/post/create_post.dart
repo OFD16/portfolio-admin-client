@@ -15,11 +15,11 @@ class CreatePostPage extends StatefulWidget {
   State<CreatePostPage> createState() => _CreatePostPageState();
 }
 
-final TextEditingController postNameController = TextEditingController();
-final TextEditingController postTypeController = TextEditingController();
-final TextEditingController postTitleController = TextEditingController();
-final TextEditingController postIntroTextController = TextEditingController();
-final TextEditingController postIntroImageController = TextEditingController();
+final TextEditingController postNameController = TextEditingController(text: "");
+final TextEditingController postTypeController = TextEditingController(text: "");
+final TextEditingController postTitleController = TextEditingController(text: "");
+final TextEditingController postIntroTextController = TextEditingController(text: "");
+final TextEditingController postIntroImageController = TextEditingController(text: "");
 
 final TextEditingController linkController = TextEditingController();
 
@@ -37,9 +37,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
     Function addPostLink = Provider.of<States>(context).addPostLink;
     Function updatePostLink = Provider.of<States>(context).updatePostLink;
     Function deletePostLink = Provider.of<States>(context).deletePostLink;
+    Function clearPostLinks = Provider.of<States>(context).clearPostLinks;
 
     Function setCurrentIndex1 = Provider.of<States>(context).setCurrentIndex1;
+
     List<Paragraph> paragraphsList1 = Provider.of<States>(context).paragraphsList1;
+    Function clearParagraphs1 = Provider.of<States>(context).clearParagraphs1;
     double width = MediaQuery.of(context).size.width;
 
     Post newPost = Post(
@@ -213,7 +216,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
             newPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
             newPost.links = linksPostList,
             addPost(newPost),
-            Navigator.pushReplacementNamed(context, 'home_view')
+            setIndexContent(0),
+            //Sayfadan çıktıktna sonra içeriğini temizleme
+            postNameController.text = "",
+            postTypeController.text = "",
+            postTitleController.text = "",
+            postIntroImageController.text = "",
+            postIntroTextController.text = "",
+            clearParagraphs1(),
+            clearPostLinks(),
           },
           child: const Text('Bloğu Oluştur'),
         ),

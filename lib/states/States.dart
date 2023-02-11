@@ -18,6 +18,10 @@ class States extends ChangeNotifier {
     myPosts.remove(post);
     notifyListeners();
   }
+  void clearPosts(){
+    myPosts.clear();
+    notifyListeners();
+  }
 
   List<Project> myProjects = [];
   void addProject (Project project){
@@ -30,6 +34,10 @@ class States extends ChangeNotifier {
   }
   void deleteProject(Project project){
     myProjects.remove(project);
+    notifyListeners();
+  }
+  void clearProjects(){
+    myProjects.clear();
     notifyListeners();
   }
 
@@ -46,6 +54,10 @@ class States extends ChangeNotifier {
     membersList.remove(memberName);
     notifyListeners();
   }
+  void clearMembers(){
+    membersList.clear();
+    notifyListeners();
+  }
 
   List<String> linksList = [];
   void addLink (String link){
@@ -60,6 +72,10 @@ class States extends ChangeNotifier {
     linksList.remove(link);
     notifyListeners();
   }
+  void clearLinks(){
+    linksList.clear();
+    notifyListeners();
+  }
 
   List<String> linksPostList = [];
   void addPostLink (String link){
@@ -72,6 +88,10 @@ class States extends ChangeNotifier {
   }
   void deletePostLink(String link){
     linksPostList.remove(link);
+    notifyListeners();
+  }
+  void clearPostLinks(){
+    linksPostList.clear();
     notifyListeners();
   }
 
@@ -112,6 +132,10 @@ class States extends ChangeNotifier {
     paragraphsList.remove(paragraph);
     notifyListeners();
   }
+  void clearParagraphs(){
+    paragraphsList.clear();
+    notifyListeners();
+  }
 
   List<Paragraph> paragraphsList1 = [];
   void addParagraph1(Paragraph paragraph){
@@ -124,6 +148,10 @@ class States extends ChangeNotifier {
   }
   void deleteParagraph1(Paragraph paragraph){
     paragraphsList1.remove(paragraph);
+    notifyListeners();
+  }
+  void clearParagraphs1(){
+    paragraphsList1.clear();
     notifyListeners();
   }
 

@@ -27,7 +27,6 @@ class _ProjectPageState extends State<ProjectPage> {
         ),
         itemCount: myProjects.length,
         itemBuilder: (BuildContext context, int index) {
-          print(width);
           return PostCard(myProjects[index].introImg, myProjects[index].projectName, () => {});
         });
   }
