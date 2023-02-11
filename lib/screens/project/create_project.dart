@@ -1,5 +1,4 @@
 import 'package:admin_client_portfolio/components/Cards/ImageCard.dart';
-import 'package:admin_client_portfolio/components/Cards/ParagraphCard.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:flutter/material.dart';
@@ -15,22 +14,24 @@ class CreateProjectPage extends StatefulWidget {
 final TextEditingController projectNameController = TextEditingController();
 final TextEditingController projectTypeController = TextEditingController();
 final TextEditingController projectTitleController = TextEditingController();
-final TextEditingController projectIntroTextController = TextEditingController();
-final TextEditingController projectIntroImageController = TextEditingController();
+final TextEditingController projectIntroTextController =
+    TextEditingController();
+final TextEditingController projectIntroImageController =
+    TextEditingController();
 
 class _CreateProjectPageState extends State<CreateProjectPage> {
   @override
   Widget build(BuildContext context) {
-    Paragraph paragraphInstance = Provider.of<States>(context).paragraphInstance;
-    Function setParagraphInstance = Provider.of<States>(context).setParagraphInstance;
-    Function clearParagraphInstance = Provider.of<States>(context).clearParagraphInstance;
+    Function setCurrentParagraph =
+        Provider.of<States>(context).setCurrentParagraph;
+    Function setCurrentIndex = Provider.of<States>(context).setCurrentIndex;
+    Paragraph paragraphInstance = Paragraph();
 
     List paragraphsList = Provider.of<States>(context).paragraphsList;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     double width = MediaQuery.of(context).size.width;
 
     return ListView(
-      shrinkWrap: true,
       children: [
         TextFormField(
           decoration: const InputDecoration(
@@ -78,7 +79,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           children: [
             const Text('Paragraflar'),
             InkWell(
-              onTap: ()=>{ clearParagraphInstance(), setIndexContent(6)},
+              onTap: () =>
+                  {setCurrentParagraph(paragraphInstance), setIndexContent(6)},
               child: const Row(
                 children: [
                   Text('Paragraf Ekle'),
@@ -88,27 +90,30 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             )
           ],
         ),
-        SizedBox(
-          height: 120,
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              crossAxisCount:
-              (width < 1060 ? (width < 800 ? (width < 650 ? 2 : 4) : 6) : 8),
-            ),
-            itemCount: paragraphsList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ImageCard(()=>{setParagraphInstance(paragraphsList[index]) ,setIndexContent(6)});
-            },
+        GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            crossAxisCount: (width < 1060
+                ? (width < 800 ? (width < 650 ? 2 : 4) : 6)
+                : 8),
           ),
+          itemCount: paragraphsList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ImageCard(() => {
+                  setCurrentParagraph(paragraphsList[index]),
+                  setCurrentIndex(index),
+                  setIndexContent(7),
+                });
+          },
         ),
         const SizedBox(height: 8),
         ElevatedButton(
-          onPressed: () =>
-              {
-                /*Navigator.pushReplacementNamed(context, 'home_view')*/
-              },
+          onPressed: () => {
+            print('listem: ${paragraphsList}')
+            /*Navigator.pushReplacementNamed(context, 'home_view')*/
+          },
           child: const Text('Projeyi Oluştur'),
         ),
       ],

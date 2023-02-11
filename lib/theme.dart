@@ -9,7 +9,7 @@ class AppColors {
     primaryColor: Colors.black,
     brightness: Brightness.dark,
     dividerColor: Colors.white30,
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       labelStyle: TextStyle(
         color: Colors.white
       ),

@@ -29,21 +29,18 @@ class _MyDesktopBodyState extends State<MyDesktopBody> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CustomDrawer(),
               Expanded(
                 flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    color: themenotifier.isDark
-                        ? AppColors().darkCard
-                        : Colors.deepPurple[300],
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: widget.contents[indexContent],
-                    ),
-                  ),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
+                  color: themenotifier.isDark
+                      ? AppColors().darkCard
+                      : Colors.deepPurple[300],
+                  child: widget.contents[indexContent],
                 ),
               ),
             ],

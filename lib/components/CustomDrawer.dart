@@ -64,7 +64,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               ProcessCard(
                                   "Blogları Listele", Icons.list, () => {setIndexContent(0)}, indexContent == 0),
                               ProcessCard(
-                                  "Yeni Blog Oluştur", Icons.add, () => {setIndexContent(1)}, indexContent == 1),
+                                  "Yeni Blog Oluştur", Icons.add, () => {setIndexContent(1)}, indexContent == 1 || indexContent == 8 || indexContent == 9),
                             ],
                           ),
                           isExpanded: _isOpen[0]),
@@ -81,7 +81,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               ProcessCard(
                                   "Projeleri Listele", Icons.list, () => {setIndexContent(2)}, indexContent == 2),
                               ProcessCard(
-                                  "Yeni Projee Oluştur", Icons.add, () => {setIndexContent(3)}, indexContent == 3),
+                                  "Yeni Proje Oluştur", Icons.add, () => {setIndexContent(3)}, indexContent == 3 || indexContent == 6 || indexContent == 7),
                             ],
                           ),
                           isExpanded: _isOpen[1]),
@@ -120,7 +120,3 @@ class _CustomDrawerState extends State<CustomDrawer> {
     });
   }
 }
-/*ProcessCard(
-                      items[index]["processTitle"],
-                      items[index]["iconName"],
-                          () => {setIndexContent(items[index]["page"])}),*/

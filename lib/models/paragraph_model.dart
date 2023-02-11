@@ -8,12 +8,11 @@ class Paragraph {
   String? lastVideo;
 
   Paragraph(
-      {this.firstVideo ,
-      this.firstImg ,
-      this.leftImg ,
-      this.paragraphText ,
-      this.rightImg ,
-      this.lastImg ,
-      this.lastVideo });
-
+      {this.firstVideo = " ",
+      this.firstImg = " ",
+      this.leftImg = " ",
+      this.paragraphText = " ",
+      this.rightImg = " ",
+      this.lastImg = " ",
+      this.lastVideo = " "});
 }

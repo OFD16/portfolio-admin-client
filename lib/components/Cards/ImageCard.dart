@@ -24,27 +24,5 @@ class _ImageCardState extends State<ImageCard> {
         child: const Icon(Icons.verified),
       ),
     );
-
-
-/*      Container(
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey : Colors.purple[800],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      height: 110,
-      width: 100  ,
-      child: Column(
-        children: [
-          Expanded(flex: 1, child: Text(widget.title,softWrap: true,)),
-          Expanded(
-            flex: 1,
-            child: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: ()=>{},
-            ),
-          ),
-        ],
-      ),
-    );*/
   }
 }
