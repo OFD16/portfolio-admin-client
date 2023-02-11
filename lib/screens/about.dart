@@ -1,3 +1,5 @@
+import 'package:admin_client_portfolio/modals/experienceModal.dart';
+import 'package:admin_client_portfolio/models/experience_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +24,22 @@ class _AboutPageState extends State<AboutPage> {
   List socialLinks = [];
   List markedProjects = [];
   List markedBlogs = [];
+  List experiences = [
+    Experience(
+        startedTime: "12 eylül 2020",
+        finishedTime: "13 haziran 2020",
+        companyName: "SOLVIO",
+        jobName: "ömere basmak",
+        introduction: "patır kütür basma keyfi",
+        image: 'https://cdn-icons-png.flaticon.com/512/4526/4526587.png'),
+    Experience(
+        startedTime: "21 temmuz 2021",
+        finishedTime: "31 aralık 2021",
+        companyName: "CNN",
+        jobName: "Polis",
+        introduction: "Gizli görev",
+        image: 'https://cdn-icons-png.flaticon.com/512/4526/4526587.png'),
+  ];
 
   addMarkedProjectNum(String number) {
     markedProjects.add(number);
@@ -162,7 +180,7 @@ class _AboutPageState extends State<AboutPage> {
                           addMarkedProjectNum(_markedProjectsController.text);
                         });
                       },
-                icon: Icon(Icons.add)),
+                icon: const Icon(Icons.add)),
             const SizedBox(width: 86),
             Expanded(
               flex: 4,
@@ -185,7 +203,7 @@ class _AboutPageState extends State<AboutPage> {
                           addMarkedBlogNum(_markedBlogsController.text);
                         });
                       },
-                icon: Icon(Icons.add)),
+                icon: const Icon(Icons.add)),
           ],
         ),
         const SizedBox(height: 12),
@@ -204,7 +222,7 @@ class _AboutPageState extends State<AboutPage> {
                         markedProjects[index].toString() + " numaralı proje");
                   }),
             )),
-            SizedBox(width: 24),
+            const SizedBox(width: 24),
             Expanded(
                 child: Container(
               decoration: BoxDecoration(
@@ -219,6 +237,59 @@ class _AboutPageState extends State<AboutPage> {
             )),
           ],
         ),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            const Text("Experiences",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            IconButton(onPressed: !edit ? null : () {
+              showDialog(context: context, builder: (ctx) => ExperienceModal());
+            }, icon: const Icon(Icons.add)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        GridView.builder(
+          shrinkWrap: true,
+          itemCount: experiences.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3/2,
+            crossAxisCount: 4,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.redAccent, width: 2)),
+              child: Column(
+                children: [
+                  Container(
+                      child: Image.network(
+                          experiences[index].image),
+                      height: 50,
+                  ),
+                  const SizedBox(height:20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(experiences[index].jobName.toUpperCase(),style: const TextStyle(fontSize: 16),softWrap: true,),
+                      Text(experiences[index].companyName,softWrap: true,),
+                      Text(experiences[index].introduction,softWrap: true,),
+                      Row(
+                        children: [
+                          Text(experiences[index].startedTime! + " - ",style: const TextStyle(fontStyle: FontStyle.italic),softWrap: true,),
+                          Text(experiences[index].finishedTime!,style: const TextStyle(fontStyle: FontStyle.italic),softWrap: true,),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        )
       ],
     );
   }

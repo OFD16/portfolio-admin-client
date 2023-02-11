@@ -7,12 +7,12 @@ class Experience {
   String? image;
 
   Experience(
-      {this.startedTime,
-        this.finishedTime,
-        this.companyName,
-        this.jobName,
-        this.introduction,
-        this.image,
+      { required this.startedTime,
+        required this.finishedTime,
+        required this.companyName,
+        required this.jobName,
+        required this.introduction,
+        required this.image,
       });
   factory Experience.fromJson(Map<String, dynamic> json) => Experience(
     startedTime: json["started_time"] as String?,
