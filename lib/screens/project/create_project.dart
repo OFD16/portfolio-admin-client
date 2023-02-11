@@ -1,9 +1,12 @@
 import 'package:admin_client_portfolio/components/Cards/ImageCard.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
+import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/medias_model.dart';
 
 class CreateProjectPage extends StatefulWidget {
   const CreateProjectPage({Key? key}) : super(key: key);
@@ -29,17 +32,17 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     bool isDark = Provider.of<ModelTheme>(context).isDark;
     Paragraph paragraphInstance = Paragraph();
 
-    List membersList = Provider.of<States>(context).membersList;
+    List<String> membersList = Provider.of<States>(context).membersList;
     Function addMember = Provider.of<States>(context).addMember;
     Function updateMember = Provider.of<States>(context).updateMember;
     Function deleteMember = Provider.of<States>(context).deleteMember;
 
-    List linksList = Provider.of<States>(context).linksList;
+    List<String> linksList = Provider.of<States>(context).linksList;
     Function addLink = Provider.of<States>(context).addLink;
     Function updateLink = Provider.of<States>(context).updateLink;
     Function deleteLink = Provider.of<States>(context).deleteLink;
 
-    List paragraphsList = Provider.of<States>(context).paragraphsList;
+    List<Paragraph> paragraphsList = Provider.of<States>(context).paragraphsList;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     double width = MediaQuery.of(context).size.width;
 
@@ -99,6 +102,19 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         },
       );
     }
+
+    late Project newProject = Project(
+      id: 0,
+      projectName: "",
+      projectType: "",
+      projectTitle: "",
+      introImg: "",
+      projectIntro: "",
+      paragraphs: [],
+      medias: Medias(),
+      members: [],
+      links: [],
+    );
 
     return ListView(
       children: [
@@ -259,7 +275,16 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
-            /*Navigator.pushReplacementNamed(context, 'home_view')*/
+            newProject.projectName = projectNameController.text,
+            newProject.projectType = projectTypeController.text,
+            newProject.projectTitle = projectTitleController.text,
+            newProject.introImg = projectIntroImageController.text,
+            newProject.projectIntro = projectIntroTextController.text,
+            newProject.paragraphs = paragraphsList,
+            newProject.medias = Medias(videos: [], images: []),
+            newProject.members = membersList,
+            newProject.links = linksList,
+            Navigator.pushReplacementNamed(context, 'home_view')
           },
           child: const Text('Projeyi Oluştur'),
         ),
