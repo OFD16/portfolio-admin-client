@@ -34,6 +34,8 @@ List<Widget> contents = const [
   EditParagraph(),            //7
   CreateParagraph1(),         //8
   EditParagraph1(),           //9
+  ProjectDetailPage(),        //10
+  PostDetailPage(),           //11
 ];
 
 class _HomePageState extends State<HomePage> {

@@ -17,6 +17,8 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
+
     List<Post> myPosts = Provider.of<States>(context).myPosts;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -27,7 +29,9 @@ class _PostPageState extends State<PostPage> {
         ),
         itemCount: myPosts.length,
         itemBuilder: (BuildContext context, int index) {
-          return PostCard(myPosts[index].introImg, myPosts[index].postName, ()=>{});
+          return PostCard(myPosts[index].introImg, myPosts[index].postName, ()=>{
+            setIndexContent(11),
+          });
         });
   }
 }

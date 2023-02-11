@@ -38,10 +38,11 @@ class _CreateParagraph1State extends State<CreateParagraph1> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Paragraf Oluştur: '),
             IconButton(
                 onPressed: () => {setIndexContent(1)},
-                icon: const Icon(Icons.arrow_back))
+                icon: const Icon(Icons.arrow_back)),
+            const Text('Paragraf Oluştur: '),
+            const SizedBox(),
           ],
         ),
         TextFormField(
