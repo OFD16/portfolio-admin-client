@@ -1,9 +1,12 @@
 import 'package:admin_client_portfolio/components/Cards/ImageCard.dart';
+import 'package:admin_client_portfolio/models/medias_model.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/post_model.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({Key? key}) : super(key: key);
@@ -28,14 +31,28 @@ class _CreatePostPageState extends State<CreatePostPage> {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     Paragraph paragraphInstance = Paragraph();
 
-    List linksPostList = Provider.of<States>(context).linksPostList;
+    Function addPost = Provider.of<States>(context).addPost;
+
+    List<String> linksPostList = Provider.of<States>(context).linksPostList;
     Function addPostLink = Provider.of<States>(context).addPostLink;
     Function updatePostLink = Provider.of<States>(context).updatePostLink;
     Function deletePostLink = Provider.of<States>(context).deletePostLink;
 
     Function setCurrentIndex1 = Provider.of<States>(context).setCurrentIndex1;
-    List paragraphsList1 = Provider.of<States>(context).paragraphsList1;
+    List<Paragraph> paragraphsList1 = Provider.of<States>(context).paragraphsList1;
     double width = MediaQuery.of(context).size.width;
+
+    Post newPost = Post(
+        id: 0,  // id gönderilmeyecek
+        postName: '',
+        postType: '',
+        postTitle: '',
+        introImg: '',
+        postIntro: '',
+        paragraphs: [],
+        medias: Medias(),
+        postOwner: 0, //localde login olmuş user id si göndeirlicek
+        links: []);
 
     Future<void> _linkDialog(BuildContext context, String link, int index) {
       linkController.text = link;
@@ -186,8 +203,17 @@ class _CreatePostPageState extends State<CreatePostPage> {
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
-            print('listem: ${paragraphsList1}')
-            /*Navigator.pushReplacementNamed(context, 'home_view')*/
+            newPost.postName = postNameController.text,
+            newPost.postType = postTypeController.text,
+            newPost.postTitle = postTitleController.text,
+            newPost.introImg = postIntroImageController.text,
+            newPost.postIntro = postIntroTextController.text,
+            newPost.paragraphs = paragraphsList1,
+            newPost.medias = Medias(videos: [],images: []),
+            newPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
+            newPost.links = linksPostList,
+            addPost(newPost),
+            Navigator.pushReplacementNamed(context, 'home_view')
           },
           child: const Text('Bloğu Oluştur'),
         ),

@@ -32,6 +32,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     bool isDark = Provider.of<ModelTheme>(context).isDark;
     Paragraph paragraphInstance = Paragraph();
 
+    Function addProject = Provider.of<States>(context).addProject;
+
     List<String> membersList = Provider.of<States>(context).membersList;
     Function addMember = Provider.of<States>(context).addMember;
     Function updateMember = Provider.of<States>(context).updateMember;
@@ -104,7 +106,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     }
 
     late Project newProject = Project(
-      id: 0,
+      id: 0,  // id gönderilmeyecek
+      userID: 0,  //localde login olmuş user id si göndeirlicek
       projectName: "",
       projectType: "",
       projectTitle: "",
@@ -275,6 +278,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
+            newProject.userID = 0, //localde login olmuş user id si göndeirlicek
             newProject.projectName = projectNameController.text,
             newProject.projectType = projectTypeController.text,
             newProject.projectTitle = projectTitleController.text,
@@ -284,6 +288,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             newProject.medias = Medias(videos: [], images: []),
             newProject.members = membersList,
             newProject.links = linksList,
+            addProject(newProject),
             Navigator.pushReplacementNamed(context, 'home_view')
           },
           child: const Text('Projeyi Oluştur'),

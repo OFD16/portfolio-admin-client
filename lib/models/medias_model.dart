@@ -1,6 +1,6 @@
 class Medias {
-  List<String>? videos;
-  List<String>? images;
+  List<String>? videos = [];
+  List<String>? images = [];
 
   Medias(
       {this.videos,

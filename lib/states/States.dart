@@ -1,7 +1,37 @@
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
+import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:flutter/material.dart';
 
+import '../models/post_model.dart';
+
 class States extends ChangeNotifier {
+  List<Post> myPosts = [];
+  void addPost (Post post){
+    myPosts.add(post);
+    notifyListeners();
+  }
+  void updatePost (Post post, int i){
+    myPosts[i] = post;
+    notifyListeners();
+  }
+  void deletePost(Post post){
+    myPosts.remove(post);
+    notifyListeners();
+  }
+
+  List<Project> myProjects = [];
+  void addProject (Project project){
+    myProjects.add(project);
+    notifyListeners();
+  }
+  void updateProject (Project project, int i){
+    myProjects[i] = project;
+    notifyListeners();
+  }
+  void deleteProject(Project project){
+    myProjects.remove(project);
+    notifyListeners();
+  }
 
   List<String> membersList = [];
   void addMember (String memberName){

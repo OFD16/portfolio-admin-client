@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:admin_client_portfolio/models/medias_model.dart';
+import 'package:admin_client_portfolio/models/paragraph_model.dart';
 
 class Post {
   int id;

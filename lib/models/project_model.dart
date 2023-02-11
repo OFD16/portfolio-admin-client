@@ -4,11 +4,12 @@ import 'package:admin_client_portfolio/models/paragraph_model.dart';
 
 class Project {
   int? id;
-  String? projectName;
-  String? projectType;
-  String? projectTitle;
-  String? introImg;
-  String? projectIntro;
+  int userID;
+  String projectName;
+  String projectType;
+  String projectTitle;
+  String introImg;
+  String projectIntro;
   List<Paragraph> paragraphs;
   Medias? medias;
   List<String>? members;
@@ -17,6 +18,7 @@ class Project {
   Project(
       {
         required this.id,
+        required this.userID,
         required this.projectName,
         required this.projectType,
         required this.projectTitle,
@@ -30,11 +32,12 @@ class Project {
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
     id: json["id"] as int?,
-    projectName: json["project_name"] as String?,
-    projectType: json["project_type"] as String?,
-    projectTitle: json["project_title"] as String?,
-    introImg: json["intro_image"] as String?,
-    projectIntro: json["project_intro"] as String?,
+    userID: json["user_id"] as int,
+    projectName: json["project_name"] as String,
+    projectType: json["project_type"] as String,
+    projectTitle: json["project_title"] as String,
+    introImg: json["intro_image"] as String,
+    projectIntro: json["project_intro"] as String,
     paragraphs: json["paragraphs"] as List<Paragraph>,
     medias: json["medias"] as Medias?,
     members: json["members"] as List<String>?,
@@ -43,6 +46,7 @@ class Project {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "user_id": userID,
     "project_name": projectName,
     "project_type": projectType,
     "project_title": projectTitle,
