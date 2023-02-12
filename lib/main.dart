@@ -1,6 +1,7 @@
 import 'package:admin_client_portfolio/routes.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
+import 'package:admin_client_portfolio/states/experience_provider.dart';
 import 'package:admin_client_portfolio/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<States>(create: (_) => States()),
         ChangeNotifierProvider<ModelTheme>(create: (_) => ModelTheme()),
+        ChangeNotifierProvider<ExperienceProvider>(create: (_) => ExperienceProvider())
       ],
       child: Consumer<ModelTheme>(
           builder: (context, ModelTheme themeNotifier, child) {
