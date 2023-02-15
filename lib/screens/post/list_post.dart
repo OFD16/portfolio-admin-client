@@ -3,6 +3,8 @@ import 'package:admin_client_portfolio/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/paragraph_model.dart';
+import '../../services/services.dart';
 import '../../states/States.dart';
 
 class PostPage extends StatefulWidget {
@@ -13,7 +15,13 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  List<Post> blogsList = [];
+
   @override
+  void initState() {
+    getBlogs();
+    super.initState();
+  }
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
@@ -21,7 +29,7 @@ class _PostPageState extends State<PostPage> {
     Function setCurrentPost = Provider.of<States>(context).setCurrentPost;
     Function setCurrentPostIndex = Provider.of<States>(context).setCurrentPostIndex;
 
-    List<Post> myPosts = Provider.of<States>(context).myPosts;
+    List<Post> myPosts = blogsList;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 20,
@@ -40,5 +48,10 @@ class _PostPageState extends State<PostPage> {
             setIndexContent(11),
           });
         });
+  }
+
+  void getBlogs () async {
+    List<Post> lists = await Services().getBlogs();
+    blogsList = lists;
   }
 }

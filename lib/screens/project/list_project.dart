@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/project_model.dart';
+import '../../services/services.dart';
 import '../../states/States.dart';
 
 class ProjectPage extends StatefulWidget {
@@ -13,13 +14,19 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
+  List<Project> projectList = [];
+
   @override
+  void initState() {
+    getProjects();
+    super.initState();
+  }
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
-    List<Project> myProjects = Provider.of<States>(context).myProjects;
+    List<Project> myProjects = projectList;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 20,
@@ -33,5 +40,10 @@ class _ProjectPageState extends State<ProjectPage> {
             setIndexContent(10),
           });
         });
+  }
+
+  void getProjects () async {
+    List<Project> lists = await Services().getProjects();
+    projectList = lists;
   }
 }

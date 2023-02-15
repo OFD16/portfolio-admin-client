@@ -4,12 +4,11 @@ import 'dart:io';
 import 'package:admin_client_portfolio/models/post_model.dart';
 import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:admin_client_portfolio/sharedPreferences/localLogin.dart';
-import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/storage/Storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 import '../models/login_data.dart';
+import '../models/paragraph_model.dart';
 import '../models/user_model.dart';
 import '../sharedPreferences/localUser.dart';
 
@@ -30,20 +29,21 @@ class Services {
       User user = User.fromJson(body["user"]);
       LocalUserData().setLocalUser(user);
       LoginValue().setLoginValue(true);
-      print('user: $user');
+      //print('user: $user');
       return body;
     } else {
-      print('body: $body');
+      //print('body: $body');
       return body;
     }
   }
 
 //Blog
-  Future<List> getBlogs() async {
+  Future<List<Post>> getBlogs() async {
     var url = Uri.parse('${baseUrl}blogs');
     http.Response res = await http.get(url);
 
-    List blogs = jsonDecode(res.body);
+    List<dynamic> blogsJson = jsonDecode(res.body);
+    List<Post> blogs = blogsJson.map((post) => Post.fromJson(post)).toList();
     return blogs;
   }
 
@@ -100,12 +100,12 @@ class Services {
   }
 
 //Project
-  Future<List> getProjects() async {
+  Future<List<Project>> getProjects() async {
     var url = Uri.parse('${baseUrl}projects');
     http.Response res = await http.get(url);
 
-    List projects = jsonDecode(res.body);
-    //print('projeler: $projects');
+    List<dynamic> projectsJson = jsonDecode(res.body);
+    List<Project> projects = projectsJson.map((project) => Project.fromJson(project)).toList();
     return projects;
   }
 
