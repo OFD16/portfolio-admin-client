@@ -14,10 +14,13 @@ class Project {
   Medias? medias;
   List<String>? members;
   List<String>? links;
+  String? createdAt;
+  String? updatedAt;
+
 
   Project(
       {
-        required this.id,
+        this.id,
         required this.userID,
         required this.projectName,
         required this.projectType,
@@ -25,9 +28,11 @@ class Project {
         required this.introImg,
         required this.projectIntro,
         required this.paragraphs,
-        required this.medias,
-        required this.members,
-        required this.links,
+        this.medias,
+        this.members,
+        this.links,
+        this.createdAt,
+        this.updatedAt,
 });
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
@@ -38,14 +43,20 @@ class Project {
     projectTitle: json["project_title"] as String,
     introImg: json["intro_image"] as String,
     projectIntro: json["project_intro"] as String,
-    paragraphs: json["paragraphs"] as List<Paragraph>,
-    medias: json["medias"] as Medias?,
-    members: json["members"] as List<String>?,
-    links: json["links"] as List<String>?,
+    paragraphs: (json["paragraphs"] as List).map((item) => Paragraph.fromJson(item)).toList(),
+    medias: json["medias"] == null ? null : Medias.fromJson(json["medias"] as Map<String, dynamic>),
+    members: (json["links"] is List<dynamic>)
+        ? (json["links"] as List<dynamic>).map((e) => e.toString()).toList()
+        : [],
+    links: (json["links"] is List<dynamic>)
+        ? (json["links"] as List<dynamic>).map((e) => e.toString()).toList()
+        : [],
+    createdAt: json["created_at"] as String?,
+    updatedAt: json["updated_at"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    //"id": id,
     "user_id": userID,
     "project_name": projectName,
     "project_type": projectType,
@@ -56,5 +67,7 @@ class Project {
     "medias": medias,
     "members": members,
     "links": links,
+    /*"created_at": createdAt,
+    "updated_at": updatedAt,*/
   };
 }

@@ -10,14 +10,14 @@ class User {
   int age;
   String email;
   String userImg;
-  Map<dynamic, String> socialLinks;
+  Map<dynamic, String>? socialLinks;
   String introduction;
-  Medias medias;
+  Medias? medias;
   List<int> markedProjects;
   List<int> markedBlogs;
-  List<Experience> experiences;
-  List<Education> education;
-  List<Skill> skills;
+  List<Experience>? experiences;
+  List<Education>? education;
+  List<Skill>? skills;
   String role;
 
   User(
@@ -28,34 +28,46 @@ class User {
         required this.age,
         required this.email,
         required this.userImg,
-        required this.socialLinks,
+        this.socialLinks,
         required this.introduction,
-        required this.medias,
+        this.medias,
         required this.markedProjects,
         required this.markedBlogs,
-        required this.experiences,
-        required this.education,
-        required this.skills,
+        this.experiences,
+        this.education,
+        this.skills,
         required this.role,
       });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"] as int,
-    firstName: json["first_name"] as String,
-    lastName: json["last_name"] as String,
-    age: json["age"] as int,
-    email: json["email"] as String,
-    userImg: json["user_image"] as String,
-    socialLinks: json["social_links"] as Map<dynamic, String>,
-    introduction: json["introduction"] as String,
-    medias: json["medias"] as Medias,
-    markedProjects: json["marked_projects"] as List<int>,
-    markedBlogs: json["marked_blogs"] as List<int>,
-    experiences: json["experiences"] as List<Experience>,
-    education: json["education"] as List<Education>,
-    skills: json["skills"] as List<Skill>,
-    role: json["role"] as String,
-  );
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as int,
+      firstName: json['first_name'] as String,
+      lastName: json['last_name'] as String,
+      age: json['age'] as int,
+      email: json['email'] as String,
+      userImg: json['user_image'] as String,
+      socialLinks: json['social_links'] != null
+          ? Map<dynamic, String>.from(json['social_links'])
+          : null,
+      introduction: json['introduction'] as String,
+      medias: json['medias'] != null ? Medias.fromJson(json['medias']) : null,
+      markedProjects: List<int>.from(json['marked_projects']),
+      markedBlogs: List<int>.from(json['marked_blogs']),
+      experiences: json['experiences'] != null
+          ? List<Experience>.from(
+          json['experiences'].map((e) => Experience.fromJson(e)))
+          : null,
+      education: json['education'] != null
+          ? List<Education>.from(
+          json['education'].map((e) => Education.fromJson(e)))
+          : null,
+      skills: json['skills'] != null
+          ? List<Skill>.from(json['skills'].map((e) => Skill.fromJson(e)))
+          : null,
+      role: json['role'] as String,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

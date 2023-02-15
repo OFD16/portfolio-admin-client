@@ -1,9 +1,13 @@
 import 'package:admin_client_portfolio/components/Cards/ProcessCard.dart';
+import 'package:admin_client_portfolio/sharedPreferences/localLogin.dart';
+import 'package:admin_client_portfolio/sharedPreferences/localUser.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:admin_client_portfolio/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../models/user_model.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -114,6 +118,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       "Çıkış Yap",
                       Icons.exit_to_app,
                       () => {
+                        LoginValue().setLoginValue(false),
+                        LocalUserData().setLocalUser(User(id: 0, firstName: '', lastName: '', age: 0, email: '', userImg: '', introduction: '', markedProjects: [], markedBlogs: [], role: '')),
                             Navigator.pushReplacementNamed(
                                 context, 'login_view')
                           }, false),

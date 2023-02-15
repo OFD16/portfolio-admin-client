@@ -31,6 +31,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     Paragraph paragraphInstance = Paragraph();
 
+    List<Paragraph> paragraphListInstance = [];
+
     Function addPost = Provider.of<States>(context).addPost;
 
     List<String> linksPostList = Provider.of<States>(context).linksPostList;
@@ -211,7 +213,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
             newPost.postTitle = postTitleController.text,
             newPost.introImg = postIntroImageController.text,
             newPost.postIntro = postIntroTextController.text,
+           // paragraphListInstance = ,
             newPost.paragraphs = paragraphsList1,
+
             newPost.medias = Medias(videos: [],images: []),
             newPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
             newPost.links = linksPostList,
@@ -223,7 +227,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
             postTitleController.text = "",
             postIntroImageController.text = "",
             postIntroTextController.text = "",
-            clearParagraphs1(),
+            print('******************************************************'),
+            print('eklenecek paragrapf listesi: ${paragraphsList1}'),
+            print('eklenecek paragrapf listesi uzunluğu: ${paragraphsList1.length}'),
+            print('paragrapf listem: ${newPost.paragraphs}'),
+            print('paragrapf listesin uznuluğu: ${newPost.paragraphs.length}'),
             clearPostLinks(),
           },
           child: const Text('Bloğu Oluştur'),

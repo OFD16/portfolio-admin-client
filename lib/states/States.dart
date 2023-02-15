@@ -1,10 +1,17 @@
+import 'package:admin_client_portfolio/models/medias_model.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
 import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:flutter/material.dart';
 
 import '../models/post_model.dart';
+import '../models/user_model.dart';
 
 class States extends ChangeNotifier {
+  User localUserData =  User(id: 0, firstName: "", lastName: "", age: 0, email: "", userImg: "", socialLinks: {}, introduction: "", medias: Medias(videos: [],images: []), markedProjects: [], markedBlogs: [], experiences: [], education: [], skills: [], role: "user");
+  void setLocalUser(User user){
+    localUserData = user;
+  }
+
   List<Post> myPosts = [];
   void addPost (Post post){
     myPosts.add(post);
@@ -23,6 +30,17 @@ class States extends ChangeNotifier {
     notifyListeners();
   }
 
+  Post currentPost =  Post(id: 0, postName: "", postType: "", postTitle: "", introImg: "", postIntro: "", paragraphs: [], medias: Medias(), postOwner: 0, links: []);
+  setCurrentPost(Post post){
+    currentPost = post;
+    notifyListeners();
+  }
+  int currentPostIndex = 0;
+  setCurrentPostIndex(int i){
+    currentPostIndex = i;
+    notifyListeners();
+  }
+
   List<Project> myProjects = [];
   void addProject (Project project){
     myProjects.add(project);
@@ -38,6 +56,17 @@ class States extends ChangeNotifier {
   }
   void clearProjects(){
     myProjects.clear();
+    notifyListeners();
+  }
+
+  Project currentProject = Project(id: 0, userID: 0, projectName: "", projectType: "", projectTitle: "", introImg: "", projectIntro: "", paragraphs: [], medias: Medias(), members: [], links: []);
+  setCurrentProject(Project project){
+    currentProject = project;
+    notifyListeners();
+  }
+  int currentProjectIndex = 0;
+  setCurrentProjectIndex(int i){
+    currentProjectIndex = i;
     notifyListeners();
   }
 
@@ -100,7 +129,6 @@ class States extends ChangeNotifier {
     currentParagraph = paragraph;
     notifyListeners();
   }
-
   int paragraphIndex = 0;
   setCurrentIndex(int i){
     paragraphIndex = i;

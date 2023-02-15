@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/Cards/ImageCard.dart';
+import '../../models/medias_model.dart';
+import '../../models/paragraph_model.dart';
+import '../../models/post_model.dart';
+import '../../states/States.dart';
 import '../../states/ThemeModel.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -10,47 +15,38 @@ class PostDetailPage extends StatefulWidget {
   State<PostDetailPage> createState() => _PostDetailPageState();
 }
 
-final TextEditingController postNameController = TextEditingController(text: "");
-final TextEditingController postTypeController = TextEditingController(text: "");
-final TextEditingController postTitleController = TextEditingController(text: "");
-final TextEditingController postIntroTextController = TextEditingController(text: "");
-final TextEditingController postIntroImageController = TextEditingController(text: "");
-
 final TextEditingController linkController = TextEditingController();
 
 class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
-    /*Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
-    Paragraph paragraphInstance = Paragraph();
 
-    Function addPost = Provider.of<States>(context).addPost;
+    Post currentPost = Provider.of<States>(context).currentPost;
+    int currentPostIndex = Provider.of<States>(context).currentPostIndex;
+    Function updatePost = Provider.of<States>(context).updatePost;
+    Function deletePost = Provider.of<States>(context).deletePost;
+
+    final TextEditingController postNameController = TextEditingController(text: currentPost.postName);
+    final TextEditingController postTypeController = TextEditingController(text: currentPost.postType);
+    final TextEditingController postTitleController = TextEditingController(text: currentPost.postTitle);
+    final TextEditingController postIntroTextController = TextEditingController(text: currentPost.postIntro);
+    final TextEditingController postIntroImageController = TextEditingController(text: currentPost.introImg);
+    // en son postun paragraf objelerinin lsitesini düzenleme sayfasına paragrafları göndermede kaldım
+    List<Paragraph> paragraphsList = currentPost.paragraphs;
+    Function clearParagraphs1 = Provider.of<States>(context).clearParagraphs1;
+    Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
+    int paragraphIndex = Provider.of<States>(context).paragraphIndex;
+    Function setCurrentIndex = Provider.of<States>(context).setCurrentIndex;
+    Paragraph paragraphInstance = Paragraph();
 
     List<String> linksPostList = Provider.of<States>(context).linksPostList;
     Function addPostLink = Provider.of<States>(context).addPostLink;
     Function updatePostLink = Provider.of<States>(context).updatePostLink;
     Function deletePostLink = Provider.of<States>(context).deletePostLink;
     Function clearPostLinks = Provider.of<States>(context).clearPostLinks;
-
-    Function setCurrentIndex1 = Provider.of<States>(context).setCurrentIndex1;
-
-    List<Paragraph> paragraphsList1 = Provider.of<States>(context).paragraphsList1;
-    Function clearParagraphs1 = Provider.of<States>(context).clearParagraphs1;*/
-    double width = MediaQuery.of(context).size.width;
-
-    /*Post newPost = Post(
-        id: 0,  // id gönderilmeyecek
-        postName: '',
-        postType: '',
-        postTitle: '',
-        introImg: '',
-        postIntro: '',
-        paragraphs: [],
-        medias: Medias(),
-        postOwner: 0, //localde login olmuş user id si göndeirlicek
-        links: []);*/
 
     Future<void> _linkDialog(BuildContext context, String link, int index) {
       linkController.text = link;
@@ -63,7 +59,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               children: [
                 IconButton(onPressed: ()=>{Navigator.of(context).pop()}, icon: const Icon(Icons.arrow_back)),
                 const Text('Link Ekle/Düzenle'),
-                IconButton(onPressed: ()=>{/*deletePostLink(linkController.text),*/ Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
+                IconButton(onPressed: ()=>{deletePostLink(linkController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
             content: TextFormField(controller: linkController,),
@@ -71,7 +67,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               TextButton(
                 child: Text('Ekle/Düzenle', style: TextStyle(color: isDark ? null : Colors.deepPurple[800]),),
                 onPressed: () {
-                 /* link == "" ? addPostLink(linkController.text) : updatePostLink(linkController.text, index);*/
+                  link == "" ? addPostLink(linkController.text) : updatePostLink(linkController.text, index);
                   Navigator.of(context).pop();
                 },
               ),
@@ -87,13 +83,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => {/*setIndexContent(1)*/},
+                onPressed: () => {setIndexContent(0)},
                 icon: const Icon(Icons.arrow_back)),
             const Text('Blog Düzenle: '),
             IconButton(
                 onPressed: () => {
-                  /*deleteParagraph1(currentParagraph),
-                      setIndexContent(1)*/
+                  deletePost(currentPost),
+                      setIndexContent(0)
                 },
                 icon: const Icon(Icons.delete)),
           ],
@@ -129,7 +125,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ),
           controller: postIntroImageController,
         ),
-        //ImageCard("Blognin Ana Resim Linki:"),
         const SizedBox(height: 8),
         TextFormField(
           decoration: const InputDecoration(
@@ -145,7 +140,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             const Text('Paragraflar'),
             InkWell(
               onTap: () =>
-              {/*setCurrentParagraph(paragraphInstance), setIndexContent(8)*/},
+              {setCurrentParagraph(paragraphInstance), setIndexContent(8)},
               child: const Row(
                 children: [
                   Text('Paragraf Ekle'),
@@ -155,7 +150,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             )
           ],
         ),
-        /*GridView.builder(
+        GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 20,
@@ -164,15 +159,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 ? (width < 800 ? (width < 650 ? 2 : 4) : 6)
                 : 8),
           ),
-          itemCount: paragraphsList1.length,
+          itemCount: paragraphsList.length,
           itemBuilder: (BuildContext context, int index) {
             return ImageCard(() => {
-              setCurrentParagraph(paragraphsList1[index]),
-              setCurrentIndex1(index),
-              setIndexContent(9),
+
+              /*setCurrentParagraph(paragraphsList[index]),
+              setCurrentIndex(index),
+              setIndexContent(9),*/
             });
           },
-        ),*/
+        ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,7 +185,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             )
           ],
         ),
-        /*GridView.builder(
+        GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 0,
@@ -212,20 +208,32 @@ class _PostDetailPageState extends State<PostDetailPage> {
               ),
             );
           },
-        ),*/
+        ),
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
-            /*newPost.postName = postNameController.text,
-            newPost.postType = postTypeController.text,
-            newPost.postTitle = postTitleController.text,
-            newPost.introImg = postIntroImageController.text,
-            newPost.postIntro = postIntroTextController.text,
-            newPost.paragraphs = paragraphsList1,
-            newPost.medias = Medias(videos: [],images: []),
-            newPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
-            newPost.links = linksPostList,
-            addPost(newPost),
+            print('paragraflar : ${currentPost.paragraphs}'),
+            print('paragrafların sayısı : ${currentPost.paragraphs.length}'),
+/*            currentPost.postName = postNameController.text,
+            currentPost.postType = postTypeController.text,
+            currentPost.postTitle = postTitleController.text,
+            currentPost.introImg = postIntroImageController.text,
+            currentPost.postIntro = postIntroTextController.text,
+            currentPost.paragraphs = paragraphsList,
+            currentPost.medias = Medias(videos: [],images: []),
+            currentPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
+            currentPost.links = linksPostList,
+            updatePost(currentPost, currentPostIndex),
+            currentPost.postName = postNameController.text,
+            currentPost.postType = postTypeController.text,
+            currentPost.postTitle = postTitleController.text,
+            currentPost.introImg = postIntroImageController.text,
+            currentPost.postIntro = postIntroTextController.text,
+            currentPost.paragraphs = paragraphsList,
+            currentPost.medias = Medias(videos: [],images: []),
+            currentPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
+            currentPost.links = linksPostList,
+            updatePost(currentPost),
             setIndexContent(0),
             //Sayfadan çıktıktna sonra içeriğini temizleme
             postNameController.text = "",

@@ -16,8 +16,10 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
+
+    Function setCurrentPost = Provider.of<States>(context).setCurrentPost;
+    Function setCurrentPostIndex = Provider.of<States>(context).setCurrentPostIndex;
 
     List<Post> myPosts = Provider.of<States>(context).myPosts;
     return GridView.builder(
@@ -30,6 +32,11 @@ class _PostPageState extends State<PostPage> {
         itemCount: myPosts.length,
         itemBuilder: (BuildContext context, int index) {
           return PostCard(myPosts[index].introImg, myPosts[index].postName, ()=>{
+            print('currentPost: ${myPosts[index]}'),
+            print('currentPost paragraflaro: ${myPosts[index].paragraphs}'),
+            print('currentPost paragrafların uzunluğu: ${myPosts[index].paragraphs.length}'),
+            setCurrentPost(myPosts[index]),
+            setCurrentPostIndex(index),
             setIndexContent(11),
           });
         });

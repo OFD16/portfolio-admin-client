@@ -25,7 +25,7 @@ class _CreateParagraphState extends State<CreateParagraph> {
     TextEditingController leftImgLinkC =
         TextEditingController(text: currentParagraph.leftImg);
     TextEditingController paragraphC =
-        TextEditingController(text: currentParagraph.paragraphText);
+        TextEditingController(text: currentParagraph.paragraph);
     TextEditingController rightImgLinkC =
         TextEditingController(text: currentParagraph.rightImg);
     TextEditingController lastImgLinkC =
@@ -108,7 +108,7 @@ class _CreateParagraphState extends State<CreateParagraph> {
             currentParagraph.firstVideo = firstVideoLinkC.text,
             currentParagraph.firstImg = firstImgLinkC.text,
             currentParagraph.leftImg = leftImgLinkC.text,
-            currentParagraph.paragraphText = paragraphC.text,
+            currentParagraph.paragraph = paragraphC.text,
             currentParagraph.rightImg = rightImgLinkC.text,
             currentParagraph.lastImg = lastImgLinkC.text,
             currentParagraph.lastVideo = lastVideoLinkC.text,
