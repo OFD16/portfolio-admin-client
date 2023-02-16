@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/medias_model.dart';
+import '../../models/user_model.dart';
+import '../../services/services.dart';
+import '../../sharedPreferences/localUser.dart';
 
 class CreateProjectPage extends StatefulWidget {
   const CreateProjectPage({Key? key}) : super(key: key);
@@ -25,6 +28,18 @@ final TextEditingController memberNameController = TextEditingController();
 final TextEditingController linkController = TextEditingController();
 
 class _CreateProjectPageState extends State<CreateProjectPage> {
+  User localUser = User(id: 0, firstName: "", lastName: "", age: 0, email: "", userImg: "", introduction: "", markedProjects: [], markedBlogs: [], role: "");
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalUser();
+  }
+
+  void _loadLocalUser() async {
+    localUser = await LocalUserData().getLocalUser();
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
@@ -32,7 +47,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     bool isDark = Provider.of<ModelTheme>(context).isDark;
     Paragraph paragraphInstance = Paragraph();
 
-    Function addProject = Provider.of<States>(context).addProject;
+    /*Function addProject = Provider.of<States>(context).addProject;*/
 
     List<String> membersList = Provider.of<States>(context).membersList;
     Function addMember = Provider.of<States>(context).addMember;
@@ -52,7 +67,28 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     double width = MediaQuery.of(context).size.width;
 
-    Future<void> _memberDialog(BuildContext context, String memberName, int index) {
+    Project newProject = Project(userID: 0, projectName: "", projectType: "", projectTitle: "", introImg: "", projectIntro: "", paragraphs: [], medias: Medias(images: [], videos: []), members: [], links: []);
+    void createProject (Project project) async {
+      await Services().createProject(project).then((res) => {
+        if(newProject.userID == res.userID){
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Proje Başarıyla Oluşturuldu"))),
+          setIndexContent(0),
+          //Sayfadan çıktıktna sonra içeriğini temizleme
+          projectNameController.text = "",
+          projectTypeController.text = "",
+          projectTitleController.text = "",
+          projectIntroImageController.text = "",
+          projectIntroTextController.text = "",
+          clearParagraphs(),
+          clearMembers(),
+          clearLinks(),
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Proje oluşturulurken bir sorun oluştu :(")))
+        }
+      } );
+    }
+
+    Future<void> memberDialog(BuildContext context, String memberName, int index) {
       memberNameController.text = memberName;
       return showDialog<void>(
         context: context,
@@ -80,7 +116,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         },
       );
     }
-    Future<void> _linkDialog(BuildContext context, String link, int index) {
+    Future<void> linkDialog(BuildContext context, String link, int index) {
       linkController.text = link;
       return showDialog<void>(
         context: context,
@@ -108,20 +144,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         },
       );
     }
-
-    late Project newProject = Project(
-      id: 0,  // id gönderilmeyecek
-      userID: 0,  //localde login olmuş user id si göndeirlicek
-      projectName: "",
-      projectType: "",
-      projectTitle: "",
-      introImg: "",
-      projectIntro: "",
-      paragraphs: [],
-      medias: Medias(),
-      members: [],
-      links: [],
-    );
 
     return ListView(
       children: [
@@ -205,7 +227,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           children: [
             const Text('Üyeler'),
             InkWell(
-              onTap: () => {_memberDialog(context, "",0)},
+              onTap: () => {memberDialog(context, "",0)},
               child: const Row(
                 children: [
                   Text('Üye Ekle'),
@@ -227,7 +249,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           itemCount: membersList.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: ()=>{_memberDialog(context, membersList[index], index)},
+              onTap: ()=>{memberDialog(context, membersList[index], index)},
               child: Chip(
                   label: Text(membersList[index]),
                 labelStyle: const TextStyle(
@@ -245,7 +267,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           children: [
             const Text('Linkler'),
             InkWell(
-              onTap: () => {_linkDialog(context, "",0)},
+              onTap: () => {linkDialog(context, "",0)},
               child: const Row(
                 children: [
                   Text('Link Ekle'),
@@ -267,7 +289,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           itemCount: linksList.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: ()=>{_linkDialog(context, linksList[index], index)},
+              onTap: ()=>{linkDialog(context, linksList[index], index)},
               child: Chip(
                 label: Text(linksList[index]),
                 labelStyle: const TextStyle(
@@ -282,27 +304,17 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
-            newProject.userID = 0, //localde login olmuş user id si göndeirlicek
             newProject.projectName = projectNameController.text,
             newProject.projectType = projectTypeController.text,
-            newProject.projectTitle = projectTitleController.text,
+            newProject.projectTitle = projectTypeController.text,
             newProject.introImg = projectIntroImageController.text,
             newProject.projectIntro = projectIntroTextController.text,
             newProject.paragraphs = paragraphsList,
-            newProject.medias = Medias(videos: [], images: []),
+            newProject.medias = Medias(videos: [],images: []),
+            newProject.userID = localUser.id, // localdeki login olmuş user id si gönderilicek
             newProject.members = membersList,
             newProject.links = linksList,
-            addProject(newProject),
-            setIndexContent(2),
-            //Sayfadan çıktıktna sonra içeriğini temizleme
-            projectNameController.text = "",
-            projectTypeController.text = "",
-            projectTitleController.text = "",
-            projectIntroImageController.text = "",
-            projectIntroTextController.text = "",
-            clearParagraphs(),
-            clearMembers(),
-            clearLinks(),
+            createProject(newProject),
           },
           child: const Text('Projeyi Oluştur'),
         ),

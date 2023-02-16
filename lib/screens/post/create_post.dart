@@ -1,12 +1,15 @@
 import 'package:admin_client_portfolio/components/Cards/ImageCard.dart';
 import 'package:admin_client_portfolio/models/medias_model.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
+import 'package:admin_client_portfolio/sharedPreferences/localUser.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/post_model.dart';
+import '../../models/user_model.dart';
+import '../../services/services.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({Key? key}) : super(key: key);
@@ -24,6 +27,18 @@ final TextEditingController postIntroImageController = TextEditingController(tex
 final TextEditingController linkController = TextEditingController();
 
 class _CreatePostPageState extends State<CreatePostPage> {
+  User localUser = User(id: 0, firstName: "", lastName: "", age: 0, email: "", userImg: "", introduction: "", markedProjects: [], markedBlogs: [], role: "");
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalUser();
+  }
+
+  void _loadLocalUser() async {
+    localUser = await LocalUserData().getLocalUser();
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     bool isDark = Provider.of<ModelTheme>(context).isDark;
@@ -31,9 +46,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     Paragraph paragraphInstance = Paragraph();
 
-    List<Paragraph> paragraphListInstance = [];
-
-    Function addPost = Provider.of<States>(context).addPost;
+/*    List<Paragraph> paragraphListInstance = [];
+    Function addPost = Provider.of<States>(context).addPost;*/
 
     List<String> linksPostList = Provider.of<States>(context).linksPostList;
     Function addPostLink = Provider.of<States>(context).addPostLink;
@@ -59,7 +73,26 @@ class _CreatePostPageState extends State<CreatePostPage> {
         postOwner: 0, //localde login olmuş user id si göndeirlicek
         links: []);
 
-    Future<void> _linkDialog(BuildContext context, String link, int index) {
+    void createBlog (Post post) async {
+      await Services().createBlog(post).then((res) => {
+        if(newPost.postOwner == res.postOwner){
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Blog Başarıyla Oluşturuldu"))),
+          setIndexContent(0),
+          //Sayfadan çıktıktna sonra içeriğini temizleme
+          postNameController.text = "",
+          postTypeController.text = "",
+          postTitleController.text = "",
+          postIntroImageController.text = "",
+          postIntroTextController.text = "",
+          clearParagraphs1(),
+          clearPostLinks(),
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Blog oluşturulurken bir sorun oluştu :(")))
+        }
+      } );
+    }
+
+    Future<void> linkDialog(BuildContext context, String link, int index) {
       linkController.text = link;
       return showDialog<void>(
         context: context,
@@ -171,7 +204,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           children: [
             const Text('Linkler'),
             InkWell(
-              onTap: () => {_linkDialog(context, "",0)},
+              onTap: () => {linkDialog(context, "",0)},
               child: const Row(
                 children: [
                   Text('Link Ekle'),
@@ -193,7 +226,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           itemCount: linksPostList.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: ()=>{_linkDialog(context, linksPostList[index], index)},
+              onTap: ()=>{linkDialog(context, linksPostList[index], index)},
               child: Chip(
                 label: Text(linksPostList[index]),
                 labelStyle: const TextStyle(
@@ -213,30 +246,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
             newPost.postTitle = postTitleController.text,
             newPost.introImg = postIntroImageController.text,
             newPost.postIntro = postIntroTextController.text,
-           // paragraphListInstance = ,
             newPost.paragraphs = paragraphsList1,
-
             newPost.medias = Medias(videos: [],images: []),
-            newPost.postOwner = 0, // localdeki login olmuş user id si gönderilicek
+            newPost.postOwner = localUser.id, // localdeki login olmuş user id si gönderilicek
             newPost.links = linksPostList,
-            addPost(newPost),
-            setIndexContent(0),
-            //Sayfadan çıktıktna sonra içeriğini temizleme
-            postNameController.text = "",
-            postTypeController.text = "",
-            postTitleController.text = "",
-            postIntroImageController.text = "",
-            postIntroTextController.text = "",
-            print('******************************************************'),
-            print('eklenecek paragrapf listesi: ${paragraphsList1}'),
-            print('eklenecek paragrapf listesi uzunluğu: ${paragraphsList1.length}'),
-            print('paragrapf listem: ${newPost.paragraphs}'),
-            print('paragrapf listesin uznuluğu: ${newPost.paragraphs.length}'),
-            clearPostLinks(),
+            createBlog(newPost),
           },
           child: const Text('Bloğu Oluştur'),
         ),
       ],
     );
   }
+
 }
