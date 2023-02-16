@@ -9,7 +9,7 @@ class User {
   String lastName;
   int age;
   String email;
-  String userImg;
+  String? userImg;
   Map<dynamic, String>? socialLinks;
   String introduction;
   Medias? medias;
@@ -46,7 +46,7 @@ class User {
       lastName: json['last_name'] as String,
       age: json['age'] as int,
       email: json['email'] as String,
-      userImg: json['user_image'] as String,
+      userImg: json['user_image'] as String?,
       socialLinks: json['social_links'] != null
           ? Map<dynamic, String>.from(json['social_links'])
           : null,
