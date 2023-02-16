@@ -5,6 +5,7 @@ import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:admin_client_portfolio/services/services.dart';
 import 'package:admin_client_portfolio/sharedPreferences/localLogin.dart';
 import 'package:admin_client_portfolio/sharedPreferences/localUser.dart';
+import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:admin_client_portfolio/theme.dart';
 import 'package:flutter/material.dart';
@@ -27,18 +28,7 @@ LoginData loginData= LoginData(signMail: "", password: "");
 Map result = {};
 
 class _LoginPageState extends State<LoginPage> {
-  bool login = false;
-  Future getIsLogin()async{
-    bool isLogin = await LoginValue().getLoginValue();
-    setState(() {
-      login = isLogin;
-    });
-  }
   @override
-  void initState(){
-    getIsLogin();
-    super.initState();
-  }
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ModelTheme theme, child) {
       return Scaffold(
