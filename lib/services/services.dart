@@ -11,6 +11,7 @@ import '../models/login_data.dart';
 import '../models/paragraph_model.dart';
 import '../models/user_model.dart';
 import '../sharedPreferences/localUser.dart';
+import '../states/States.dart';
 
 class Services {
   String baseUrl = "http://localhost:5000/";
@@ -27,6 +28,7 @@ class Services {
       var tokenTime = body["tokenTime"];
       SecureStorage().writeSecureData("token", token);
       User user = User.fromJson(body["user"]);
+      States().setLocalUser(user);
       LocalUserData().setLocalUser(user);
       LoginValue().setLoginValue(true);
       //print('user: $user');
@@ -56,7 +58,7 @@ class Services {
     return body;
   }
 
-  Future<Post> createBlog(Post post) async {
+  Future createBlog(Post post) async {
     var headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     var url = Uri.parse('${baseUrl}blogs');
 
