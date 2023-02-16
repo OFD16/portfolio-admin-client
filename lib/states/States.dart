@@ -10,6 +10,11 @@ class States extends ChangeNotifier {
   User localUserData =  User(id: 0, firstName: "", lastName: "", age: 0, email: "", userImg: "", socialLinks: {}, introduction: "", medias: Medias(videos: [],images: []), markedProjects: [], markedBlogs: [], experiences: [], education: [], skills: [], role: "user");
   void setLocalUser(User user){
     localUserData = user;
+    notifyListeners();
+  }
+  User getLocalUser(){
+    return localUserData ;
+    notifyListeners();
   }
 
   List<Post> myPosts = [];
