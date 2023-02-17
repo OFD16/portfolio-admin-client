@@ -43,7 +43,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   @override
   Widget build(BuildContext context) {
     Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
-    Function setCurrentIndex = Provider.of<States>(context).setCurrentIndex;
+    Function setCurrentIndex = Provider.of<States>(context).setCurrentParagraphIndex;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
     Paragraph paragraphInstance = Paragraph();
 
