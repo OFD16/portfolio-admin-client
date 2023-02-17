@@ -13,11 +13,13 @@ class EditParagraph1 extends StatefulWidget {
 class _EditParagraph1State extends State<EditParagraph1> {
   @override
   Widget build(BuildContext context) {
-    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
+    int lastIndexContent = Provider.of<States>(context).lastIndexContent;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
-    int paragraphIndex1 = Provider.of<States>(context).paragraphIndex1;
-    Function updateParagraph1 = Provider.of<States>(context).updateParagraph1;
-    Function deleteParagraph1 = Provider.of<States>(context).deleteParagraph1;
+
+    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
+    int paragraphIndex = Provider.of<States>(context).paragraphIndex;
+    Function updateParagraphTOPost = Provider.of<States>(context).updateParagraphTOPost;
+    Function deleteParagraphTOPost = Provider.of<States>(context).deleteParagraphTOPost;
 
 
     TextEditingController firstVideoLinkC =
@@ -41,13 +43,14 @@ class _EditParagraph1State extends State<EditParagraph1> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => {setIndexContent(1)},
+                onPressed: () => {setIndexContent(lastIndexContent)},
                 icon: const Icon(Icons.arrow_back)),
             const Text('Paragraf Düzenle: '),
             IconButton(
                 onPressed: () => {
-                  deleteParagraph1(currentParagraph),
-                  setIndexContent(1)
+                  deleteParagraphTOPost(currentParagraph),
+                  print('son sayfa: $lastIndexContent'),
+                  setIndexContent(lastIndexContent),
                 },
                 icon: const Icon(Icons.delete)),
           ],
@@ -119,8 +122,8 @@ class _EditParagraph1State extends State<EditParagraph1> {
             currentParagraph.rightImg = rightImgLinkC.text,
             currentParagraph.lastImg = lastImgLinkC.text,
             currentParagraph.lastVideo = lastVideoLinkC.text,
-            updateParagraph1(currentParagraph, paragraphIndex1),
-            setIndexContent(1),
+            updateParagraphTOPost(currentParagraph, paragraphIndex),
+            setIndexContent(lastIndexContent),
           },
           child: const Text('Onayla'),
         ),

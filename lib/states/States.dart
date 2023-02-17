@@ -34,18 +34,45 @@ class States extends ChangeNotifier {
     myPosts.clear();
     notifyListeners();
   }
-
-  Post currentPost =  Post(id: 0, postName: "", postType: "", postTitle: "", introImg: "", postIntro: "", paragraphs: [], medias: Medias(), postOwner: 0, links: []);
-  setCurrentPost(Post post){
-    currentPost = post;
-    notifyListeners();
-  }
   int currentPostIndex = 0;
   setCurrentPostIndex(int i){
     currentPostIndex = i;
     notifyListeners();
   }
+  Post currentPost =  Post(id: 0, postName: "", postType: "", postTitle: "", introImg: "", postIntro: "", paragraphs: [], medias: Medias(), postOwner: 0, links: []);
+  setCurrentPost(Post post){
+    currentPost = post;
+    notifyListeners();
+  }
+  int paragraphIndex = 0;
+  setCurrentParagraphIndex(int i){
+    paragraphIndex = i;
+    notifyListeners();
+  }
+  addParagraphTOPost(Paragraph paragraph){
+    currentPost.paragraphs.add(paragraph);
+  }
+  updateParagraphTOPost(Paragraph paragraph, int index){
+    currentPost.paragraphs[index] = paragraph;
+  }
+  deleteParagraphTOPost(Paragraph paragraph){
+    currentPost.paragraphs.remove(paragraph);
+  }
+  addLinkTOPost(String link){
+    currentPost.links?.add(link);
+  }
+  deleteLinkTOPost(String link){
+    currentPost.links?.remove(link);
+  }
 
+
+
+
+  Paragraph currentParagraph = Paragraph();
+  setCurrentParagraph(Paragraph paragraph){
+    currentParagraph = paragraph;
+    notifyListeners();
+  }
   List<Project> myProjects = [];
   void addProject (Project project){
     myProjects.add(project);
@@ -129,17 +156,6 @@ class States extends ChangeNotifier {
     notifyListeners();
   }
 
-  Paragraph currentParagraph = Paragraph();
-  setCurrentParagraph(Paragraph paragraph){
-    currentParagraph = paragraph;
-    notifyListeners();
-  }
-  int paragraphIndex = 0;
-  setCurrentIndex(int i){
-    paragraphIndex = i;
-    notifyListeners();
-  }
-
   int paragraphIndex1 = 0;
   setCurrentIndex1(int i){
     paragraphIndex1 = i;
@@ -149,6 +165,11 @@ class States extends ChangeNotifier {
   int indexContent = 0;
   void setIndexContent(int index) {
     indexContent = index;
+    notifyListeners();
+  }
+  int lastIndexContent = 0;
+  void setLastIndexContent(int index) {
+    lastIndexContent = index;
     notifyListeners();
   }
 

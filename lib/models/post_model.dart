@@ -2,7 +2,7 @@ import 'package:admin_client_portfolio/models/medias_model.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
 
 class Post {
-  int? id;
+  int id;
   int postOwner;
   String postName;
   String postType;
@@ -17,7 +17,7 @@ class Post {
 
   Post(
       {
-        this.id,
+        required this.id,
         required this.postOwner,
         required this.postName,
         required this.postType,
@@ -32,7 +32,7 @@ class Post {
       });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
-    id: json["id"] as int?,
+    id: json["id"] as int,
     postOwner: json["user_id"] as int,
     postName: json["post_name"] as String,
     postType: json["post_type"] as String,

@@ -13,9 +13,12 @@ class CreateParagraph1 extends StatefulWidget {
 class _CreateParagraph1State extends State<CreateParagraph1> {
   @override
   Widget build(BuildContext context) {
-    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
+    int lastIndexContent = Provider.of<States>(context).lastIndexContent;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
+    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
+
+    Function addParagraphTOPost = Provider.of<States>(context).addParagraphTOPost;
     Function addParagraph1 = Provider.of<States>(context).addParagraph1;
 
     TextEditingController firstVideoLinkC = TextEditingController(text: currentParagraph.firstVideo);
@@ -105,8 +108,8 @@ class _CreateParagraph1State extends State<CreateParagraph1> {
             currentParagraph.rightImg = rightImgLinkC.text,
             currentParagraph.lastImg = lastImgLinkC.text,
             currentParagraph.lastVideo = lastVideoLinkC.text,
-            addParagraph1(currentParagraph),
-            setIndexContent(1),
+            lastIndexContent == 11 ? addParagraphTOPost(currentParagraph) : addParagraph1(currentParagraph),
+            lastIndexContent == 11 ? setIndexContent(11) : setIndexContent(1),
           },
           child: const Text('Onayla'),
         ),
