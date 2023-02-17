@@ -18,7 +18,6 @@ class PostDetailPage extends StatefulWidget {
 final TextEditingController linkController = TextEditingController();
 
 class _PostDetailPageState extends State<PostDetailPage> {
-  List<Paragraph> blogsList = [];
 
   @override
   void initState() {
@@ -33,6 +32,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         Provider.of<States>(context).setLastIndexContent;
 
     Post currentPost = Provider.of<States>(context).currentPost;
+    List<String> currentPostLinks = Provider.of<States>(context).currentPostLinks;
 
     final TextEditingController postNameController =
         TextEditingController(text: currentPost.postName);
@@ -52,7 +52,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
         Provider.of<States>(context).setCurrentParagraphIndex;
     Paragraph paragraphInstance = Paragraph();
 
-    List<String> linksPostList = Provider.of<States>(context).linksPostList;
     Function addPostLink = Provider.of<States>(context).addPostLink;
     Function updatePostLink = Provider.of<States>(context).updatePostLink;
     Function deletePostLink = Provider.of<States>(context).deletePostLink;
@@ -272,12 +271,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 ? (width < 800 ? (width < 650 ? 5 : 5) : 10)
                 : 15),
           ),
-          itemCount: linksPostList.length,
+          itemCount: currentPostLinks.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () => {linkDialog(context, linksPostList[index], index)},
+              onTap: () => {linkDialog(context, currentPostLinks[index], index)},
               child: Chip(
-                label: Text(linksPostList[index]),
+                label: Text(currentPostLinks[index]),
                 labelStyle: const TextStyle(overflow: TextOverflow.ellipsis),
                 clipBehavior: Clip.none,
               ),
@@ -287,6 +286,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
+            currentPost.links = currentPostLinks,
             updateBlog(currentPost, currentPost.id),
           },
           child: const Text('Bloğu Düzenle'),

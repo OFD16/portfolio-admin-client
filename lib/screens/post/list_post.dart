@@ -28,6 +28,7 @@ class _PostPageState extends State<PostPage> {
 
     Function setCurrentPost = Provider.of<States>(context).setCurrentPost;
     Function setCurrentPostIndex = Provider.of<States>(context).setCurrentPostIndex;
+    Function setCurrentPostLinks = Provider.of<States>(context).setCurrentPostLinks;
 
     List<Post> myPosts = blogsList;
     return GridView.builder(
@@ -45,6 +46,7 @@ class _PostPageState extends State<PostPage> {
             print('currentPost paragrafların uzunluğu: ${myPosts[index].paragraphs.length}'),
             setCurrentPost(myPosts[index]),
             setCurrentPostIndex(index),
+            setCurrentPostLinks(myPosts[index].links),
             setIndexContent(11),
           });
         });

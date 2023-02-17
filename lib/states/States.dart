@@ -45,24 +45,39 @@ class States extends ChangeNotifier {
     notifyListeners();
   }
   int paragraphIndex = 0;
-  setCurrentParagraphIndex(int i){
+  void setCurrentParagraphIndex(int i){
     paragraphIndex = i;
     notifyListeners();
   }
-  addParagraphTOPost(Paragraph paragraph){
+  void addParagraphTOPost(Paragraph paragraph){
     currentPost.paragraphs.add(paragraph);
   }
-  updateParagraphTOPost(Paragraph paragraph, int index){
+  void updateParagraphTOPost(Paragraph paragraph, int index){
     currentPost.paragraphs[index] = paragraph;
   }
-  deleteParagraphTOPost(Paragraph paragraph){
+  void deleteParagraphTOPost(Paragraph paragraph){
     currentPost.paragraphs.remove(paragraph);
   }
-  addLinkTOPost(String link){
-    currentPost.links?.add(link);
+  List<String> currentPostLinks = [];
+  void setCurrentPostLinks(List<String> links){
+    currentPostLinks = links;
+    notifyListeners();
   }
-  deleteLinkTOPost(String link){
-    currentPost.links?.remove(link);
+  void clearPostLinks(){
+    currentPostLinks.clear();
+    notifyListeners();
+  }
+  void addPostLink (String link){
+    currentPostLinks.add(link);
+    notifyListeners();
+  }
+  void updatePostLink (String link, int i){
+    currentPostLinks[i] = link;
+    notifyListeners();
+  }
+  void deletePostLink(String link){
+    currentPostLinks.remove(link);
+    notifyListeners();
   }
 
 
@@ -135,24 +150,6 @@ class States extends ChangeNotifier {
   }
   void clearLinks(){
     linksList.clear();
-    notifyListeners();
-  }
-
-  List<String> linksPostList = [];
-  void addPostLink (String link){
-    linksPostList.add(link);
-    notifyListeners();
-  }
-  void updatePostLink (String link, int i){
-    linksPostList[i] = link;
-    notifyListeners();
-  }
-  void deletePostLink(String link){
-    linksPostList.remove(link);
-    notifyListeners();
-  }
-  void clearPostLinks(){
-    linksPostList.clear();
     notifyListeners();
   }
 

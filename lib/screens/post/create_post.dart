@@ -49,7 +49,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 /*    List<Paragraph> paragraphListInstance = [];
     Function addPost = Provider.of<States>(context).addPost;*/
 
-    List<String> linksPostList = Provider.of<States>(context).linksPostList;
+    List<String> linksPostList = Provider.of<States>(context).currentPostLinks;
     Function addPostLink = Provider.of<States>(context).addPostLink;
     Function updatePostLink = Provider.of<States>(context).updatePostLink;
     Function deletePostLink = Provider.of<States>(context).deletePostLink;

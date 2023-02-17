@@ -11,7 +11,7 @@ class Post {
   String postIntro;
   List<Paragraph> paragraphs;
   Medias? medias;
-  List<String>? links;
+  List<String> links;
   String? createdAt;
   String? updatedAt;
 
