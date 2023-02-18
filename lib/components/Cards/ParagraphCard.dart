@@ -1,18 +1,16 @@
-import 'package:admin_client_portfolio/components/Cards/ImageCard.dart';
+
 import 'package:flutter/material.dart';
 
-class ParagraphCard extends StatefulWidget {
+import 'ImageCard.dart';
+
+class ParagraphCard extends StatelessWidget {
   const ParagraphCard({Key? key}) : super(key: key);
 
   @override
-  State<ParagraphCard> createState() => _ParagraphCardState();
-}
-final TextEditingController firstVideoController = TextEditingController();
-final TextEditingController paragraphController = TextEditingController();
-final TextEditingController lastVideoController = TextEditingController();
-class _ParagraphCardState extends State<ParagraphCard> {
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController firstVideoController = TextEditingController();
+    final TextEditingController paragraphController = TextEditingController();
+    final TextEditingController lastVideoController = TextEditingController();
     return Column(
       children: [
         //first_video

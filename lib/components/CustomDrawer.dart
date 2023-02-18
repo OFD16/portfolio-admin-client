@@ -1,13 +1,16 @@
-import 'package:admin_client_portfolio/components/Cards/ProcessCard.dart';
-import 'package:admin_client_portfolio/sharedPreferences/localLogin.dart';
-import 'package:admin_client_portfolio/sharedPreferences/localUser.dart';
-import 'package:admin_client_portfolio/states/States.dart';
-import 'package:admin_client_portfolio/states/ThemeModel.dart';
-import 'package:admin_client_portfolio/theme.dart';
+
+import 'package:admin_client_portfolio/states/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
+import '../sharedPreferences/localLogin.dart';
+import '../sharedPreferences/localUser.dart';
+import '../states/States.dart';
+import '../states/ThemeModel.dart';
+import '../states/post_provider.dart';
+import '../theme.dart';
+import 'Cards/ProcessCard.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -38,8 +41,15 @@ List items = <Map<String, dynamic>>[
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    Function setIndexContent = Provider.of<States>(context).setIndexContent;
     int indexContent = Provider.of<States>(context).indexContent;
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
+
+    Function clearParagraphs = Provider.of<PostStates>(context).clearParagraphs;
+    Function clearPostLinks = Provider.of<PostStates>(context).clearPostLinks;
+
+    Function clearParagraphsP = Provider.of<ProjectStates>(context).clearParagraphs;
+    Function clearProjectMembers = Provider.of<ProjectStates>(context).clearProjectMembers;
+    Function clearProjectLinks = Provider.of<ProjectStates>(context).clearProjectLinks;
 
     return Consumer(builder: (context, ModelTheme theme, child) {
       return Padding(
@@ -68,9 +78,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           body: Column(
                             children: [
                               ProcessCard(
-                                  "Blogları Listele", Icons.list, () => {setIndexContent(0)}, indexContent == 0),
+                                  "Blogları Listele", Icons.list, () => {setIndexContent(0)}, indexContent == 0 || indexContent == 11 && (indexContent != 1 || indexContent != 2 || indexContent != 3 || indexContent != 4 || indexContent != 5) ),
                               ProcessCard(
-                                  "Yeni Blog Oluştur", Icons.add, () => {setIndexContent(1)}, indexContent == 1 || indexContent == 8 || indexContent == 9),
+                                  "Yeni Blog Oluştur",
+                                  Icons.add, () => {clearParagraphs(), clearPostLinks(), setIndexContent(1)},
+                                  indexContent == 1 && (indexContent != 0 || indexContent != 2 || indexContent != 3 || indexContent != 4 || indexContent != 5)),
                             ],
                           ),
                           isExpanded: _isOpen[0]),
@@ -85,9 +97,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           body: Column(
                             children: [
                               ProcessCard(
-                                  "Projeleri Listele", Icons.list, () => {setIndexContent(2)}, indexContent == 2),
+                                  "Projeleri Listele", Icons.list, () => {setIndexContent(2)}, indexContent == 2 || indexContent == 10 && (indexContent != 1 || indexContent != 0 || indexContent != 3 || indexContent != 4 || indexContent != 5)),
                               ProcessCard(
-                                  "Yeni Proje Oluştur", Icons.add, () => {setIndexContent(3)}, indexContent == 3 || indexContent == 6 || indexContent == 7),
+                                  "Yeni Proje Oluştur", Icons.add, () => {clearParagraphsP(), clearProjectMembers(), clearProjectLinks(),setIndexContent(3)}, indexContent == 3 && (indexContent != 1 || indexContent != 2 || indexContent != 0 || indexContent != 4 || indexContent != 5) ),
                             ],
                           ),
                           isExpanded: _isOpen[1]),
@@ -111,9 +123,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ],
                   ),
                   ProcessCard(
-                      "Hakkımda", Icons.info, () => {setIndexContent(4)}, indexContent == 4),
+                      "Hakkımda", Icons.info, () => {setIndexContent(4)}, indexContent == 4 && (indexContent != 1 || indexContent != 2 || indexContent != 3 || indexContent != 0 || indexContent != 5)),
                   ProcessCard(
-                      "Profilim", Icons.person, () => {setIndexContent(5)}, indexContent == 5),
+                      "Profilim", Icons.person, () => {setIndexContent(5)}, indexContent == 5 && (indexContent != 1 || indexContent != 2 || indexContent != 3 || indexContent != 4 || indexContent != 0)),
                   ProcessCard(
                       "Çıkış Yap",
                       Icons.exit_to_app,

@@ -1,10 +1,11 @@
-import 'package:admin_client_portfolio/services/services.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/Cards/ImageCard.dart';
 import '../../models/paragraph_model.dart';
 import '../../models/post_model.dart';
+import '../../services/services.dart';
 import '../../states/States.dart';
 import '../../states/ThemeModel.dart';
 import '../../states/post_provider.dart';
@@ -16,8 +17,6 @@ class PostDetailPage extends StatefulWidget {
   State<PostDetailPage> createState() => _PostDetailPageState();
 }
 
-final TextEditingController linkController = TextEditingController();
-
 class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
@@ -25,46 +24,34 @@ class _PostDetailPageState extends State<PostDetailPage> {
     double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
-    Function setLastIndexContent =
-        Provider.of<States>(context).setLastIndexContent;
+    Function setLastIndexContent = Provider.of<States>(context).setLastIndexContent;
 
     Post currentPost = Provider.of<PostStates>(context).currentPost;
-    List<String> currentPostLinks = Provider.of<PostStates>(context).currentPostLinks;
 
-    final TextEditingController postNameController =
-        TextEditingController(text: currentPost.postName);
-    final TextEditingController postTypeController =
-        TextEditingController(text: currentPost.postType);
-    final TextEditingController postTitleController =
-        TextEditingController(text: currentPost.postTitle);
-    final TextEditingController postIntroTextController =
-        TextEditingController(text: currentPost.postIntro);
-    final TextEditingController postIntroImageController =
-        TextEditingController(text: currentPost.introImg);
-    // en son postun link lsitesini düzenlemede kaldım
+    final TextEditingController postNameController = TextEditingController(text: currentPost.postName);
+    final TextEditingController postTypeController = TextEditingController(text: currentPost.postType);
+    final TextEditingController postTitleController = TextEditingController(text: currentPost.postTitle);
+    final TextEditingController postIntroTextController = TextEditingController(text: currentPost.postIntro);
+    final TextEditingController postIntroImageController = TextEditingController(text: currentPost.introImg);
+    final TextEditingController linkController = TextEditingController();
 
-    Function setCurrentParagraph =
-        Provider.of<PostStates>(context).setCurrentParagraph;
-    Function setCurrentParagraphIndex =
-        Provider.of<PostStates>(context).setCurrentParagraphIndex;
+    Function setCurrentParagraph = Provider.of<PostStates>(context).setCurrentParagraph;
+    Function setCurrentParagraphIndex = Provider.of<PostStates>(context).setCurrentParagraphIndex;
     Paragraph paragraphInstance = Paragraph();
 
+    List<String> currentPostLinks = Provider.of<PostStates>(context).currentPostLinks;
     Function addPostLink = Provider.of<PostStates>(context).addPostLink;
     Function updatePostLink = Provider.of<PostStates>(context).updatePostLink;
     Function deletePostLink = Provider.of<PostStates>(context).deletePostLink;
+    Function clearPostLinks = Provider.of<PostStates>(context).clearPostLinks;
 
     void deleteBlog(int id) async {
       await Services().deleteBlog(id).then((res) => {
-            if (res["statusCode"] == 204)
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Blog Başarıyla Silindi"))),
+            if (res["statusCode"] == 204){
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Blog Başarıyla Silindi"))),
                 setIndexContent(0),
-              }
-            else
-              {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(res["errorMessage"])))
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res["errorMessage"])))
               }
           });
     }
@@ -75,12 +62,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
               {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Post Başarıyla Güncellendi"))),
+                clearPostLinks(),
                 setIndexContent(0),
               }
             else
               {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Post Başarıyla Güncellendi"))),
+                    content: Text("Post Güncellenirken Bir Sorun Oluştu!"))),
               }
           });
     }
@@ -94,16 +82,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                    onPressed: () => {Navigator.of(context).pop()},
-                    icon: const Icon(Icons.arrow_back)),
+                IconButton(onPressed: () => {Navigator.of(context).pop()}, icon: const Icon(Icons.arrow_back)),
                 const Text('Link Ekle/Düzenle'),
-                IconButton(
-                    onPressed: () => {
-                          deletePostLink(linkController.text),
-                          Navigator.of(context).pop()
-                        },
-                    icon: const Icon(Icons.delete)),
+                IconButton(onPressed: () => {deletePostLink(linkController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
             content: TextFormField(
@@ -160,9 +141,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 icon: const Icon(Icons.arrow_back)),
             const Text('Blog Düzenle: '),
             IconButton(
-                onPressed: () => {
-                      sureCheckDialog(context, currentPost.id),
-                    },
+                onPressed: () => {sureCheckDialog(context, currentPost.id)},
                 icon: const Icon(Icons.delete)),
           ],
         ),
@@ -230,16 +209,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            crossAxisCount:
-                (width < 1060 ? (width < 800 ? (width < 650 ? 2 : 4) : 6) : 8),
-          ),
+            crossAxisCount: (width < 1060 ? (width < 800 ? (width < 650 ? 2 : 4) : 6) : 8)),
           itemCount: currentPost.paragraphs.length,
           itemBuilder: (BuildContext context, int index) {
             return ImageCard(() => {
                   setCurrentParagraph(currentPost.paragraphs[index]),
                   setCurrentParagraphIndex(index),
                   setIndexContent(9),
-                  setLastIndexContent(11),
+                  setLastIndexContent(11)
                 });
           },
         ),
@@ -264,10 +241,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
-            crossAxisCount: (width < 1060
-                ? (width < 800 ? (width < 650 ? 5 : 5) : 10)
-                : 15),
-          ),
+            crossAxisCount: (width < 1060 ? (width < 800 ? (width < 650 ? 5 : 5) : 10) : 15)),
           itemCount: currentPostLinks.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(

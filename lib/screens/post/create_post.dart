@@ -19,17 +19,11 @@ class CreatePostPage extends StatefulWidget {
   State<CreatePostPage> createState() => _CreatePostPageState();
 }
 
-final TextEditingController postNameController =
-    TextEditingController(text: "");
-final TextEditingController postTypeController =
-    TextEditingController(text: "");
-final TextEditingController postTitleController =
-    TextEditingController(text: "");
-final TextEditingController postIntroTextController =
-    TextEditingController(text: "");
-final TextEditingController postIntroImageController =
-    TextEditingController(text: "");
-
+final TextEditingController postNameController = TextEditingController(text: "");
+final TextEditingController postTypeController = TextEditingController(text: "");
+final TextEditingController postTitleController = TextEditingController(text: "");
+final TextEditingController postIntroTextController = TextEditingController(text: "");
+final TextEditingController postIntroImageController = TextEditingController(text: "");
 final TextEditingController linkController = TextEditingController();
 
 class _CreatePostPageState extends State<CreatePostPage> {
@@ -58,27 +52,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Provider.of<ModelTheme>(context).isDark;
     double width = MediaQuery.of(context).size.width;
-    Function setCurrentParagraph =
-        Provider.of<PostStates>(context).setCurrentParagraph;
+    bool isDark = Provider.of<ModelTheme>(context).isDark;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     Function setLastIndexContent = Provider.of<States>(context).setLastIndexContent;
+
+    Function setCurrentIndexC = Provider.of<PostStates>(context).setCurrentIndexC;
+    List<Paragraph> paragraphsList = Provider.of<PostStates>(context).paragraphsList;
+    Function clearParagraphs = Provider.of<PostStates>(context).clearParagraphs;
+    Function setCurrentParagraph = Provider.of<PostStates>(context).setCurrentParagraph;
     Paragraph paragraphInstance = Paragraph();
 
-    List<String> linksPostList =
-        Provider.of<PostStates>(context).currentPostLinks;
+    List<String> linksPostList = Provider.of<PostStates>(context).currentPostLinks;
     Function addPostLink = Provider.of<PostStates>(context).addPostLink;
     Function updatePostLink = Provider.of<PostStates>(context).updatePostLink;
     Function deletePostLink = Provider.of<PostStates>(context).deletePostLink;
     Function clearPostLinks = Provider.of<PostStates>(context).clearPostLinks;
-
-    Function setCurrentIndexC =
-        Provider.of<PostStates>(context).setCurrentIndexC;
-
-    List<Paragraph> paragraphsList =
-        Provider.of<PostStates>(context).paragraphsList;
-    Function clearParagraphs = Provider.of<PostStates>(context).clearParagraphs;
 
     Post newPost = Post(
         id: 0,
@@ -98,8 +87,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       await Services().createBlog(post).then((res) => {
             if (newPost.postOwner == res.postOwner)
               {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Blog Başarıyla Oluşturuldu"))),
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Blog Başarıyla Oluşturuldu"))),
                 setIndexContent(0),
 
                 ///Sayfadan çıktıktan sonra içeriğini temizleme
@@ -110,11 +98,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 postIntroTextController.text = "",
                 clearParagraphs(),
                 clearPostLinks(),
-              }
-            else
-              {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Blog oluşturulurken bir sorun oluştu :(")))
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Blog oluşturulurken bir sorun oluştu :(")))
               }
           });
     }
@@ -128,28 +113,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                    onPressed: () => {Navigator.of(context).pop()},
-                    icon: const Icon(Icons.arrow_back)),
+                IconButton(onPressed: () => {Navigator.of(context).pop()}, icon: const Icon(Icons.arrow_back)),
                 const Text('Link Ekle/Düzenle'),
-                IconButton(
-                    onPressed: () => {
-                          deletePostLink(linkController.text),
-                          Navigator.of(context).pop()
-                        },
-                    icon: const Icon(Icons.delete)),
+                IconButton(onPressed: () => {deletePostLink(linkController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
-            content: TextFormField(
-              controller: linkController,
-            ),
+            content: TextFormField(controller: linkController),
             actions: <Widget>[
               TextButton(
-                child: Text(
-                  'Ekle/Düzenle',
-                  style:
-                      TextStyle(color: isDark ? null : Colors.deepPurple[800]),
-                ),
+                child: Text('Ekle/Düzenle', style: TextStyle(color: isDark ? null : Colors.deepPurple[800]),),
                 onPressed: () {
                   link == ""
                       ? addPostLink(linkController.text)
@@ -212,7 +184,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             const Text('Paragraflar'),
             InkWell(
               onTap: () =>
-                  {setCurrentParagraph(paragraphInstance),setLastIndexContent(1), setIndexContent(8),},
+                  {setCurrentParagraph(paragraphInstance),setLastIndexContent(1), setIndexContent(8)},
               child: const Row(
                 children: [
                   Text('Paragraf Ekle'),

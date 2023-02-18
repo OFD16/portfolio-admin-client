@@ -1,7 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/Cards/ImageCard.dart';
+import '../../models/paragraph_model.dart';
+import '../../models/project_model.dart';
+import '../../services/services.dart';
+import '../../states/States.dart';
 import '../../states/ThemeModel.dart';
+import '../../states/project_provider.dart';
 
 class ProjectDetailPage extends StatefulWidget {
   const ProjectDetailPage({Key? key}) : super(key: key);
@@ -10,44 +17,63 @@ class ProjectDetailPage extends StatefulWidget {
   State<ProjectDetailPage> createState() => _ProjectDetailPageState();
 }
 
-final TextEditingController projectNameController = TextEditingController();
-final TextEditingController projectTypeController = TextEditingController();
-final TextEditingController projectTitleController = TextEditingController();
-final TextEditingController projectIntroTextController = TextEditingController();
-final TextEditingController projectIntroImageController = TextEditingController();
-
-final TextEditingController memberNameController = TextEditingController();
-final TextEditingController linkController = TextEditingController();
-
 class _ProjectDetailPageState extends State<ProjectDetailPage> {
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
-    /*Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
-    Function setCurrentIndex = Provider.of<States>(context).setCurrentIndex;
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
+    Function setLastIndexContent = Provider.of<States>(context).setLastIndexContent;
+
+    Project currentProject = Provider.of<ProjectStates>(context).currentProject;
+
+    final TextEditingController projectNameController = TextEditingController(text: currentProject.projectName);
+    final TextEditingController projectTypeController = TextEditingController(text: currentProject.projectType);
+    final TextEditingController projectTitleController = TextEditingController(text: currentProject.projectTitle);
+    final TextEditingController projectIntroTextController = TextEditingController(text: currentProject.projectIntro);
+    final TextEditingController projectIntroImageController = TextEditingController(text: currentProject.introImg);
+
+    final TextEditingController memberNameController = TextEditingController();
+    final TextEditingController linkController = TextEditingController();
+
+    Function setCurrentParagraph = Provider.of<ProjectStates>(context).setCurrentParagraph;
+    Function setCurrentParagraphIndex = Provider.of<ProjectStates>(context).setCurrentParagraphIndex;
     Paragraph paragraphInstance = Paragraph();
 
-    Function addProject = Provider.of<States>(context).addProject;
+    List<String> currentProjectMembers = Provider.of<ProjectStates>(context).currentProjectMembers;
+    Function addProjectMember = Provider.of<ProjectStates>(context).addProjectMember;
+    Function updateProjectMember = Provider.of<ProjectStates>(context).updateProjectMember;
+    Function deleteProjectMember = Provider.of<ProjectStates>(context).deleteProjectMember;
 
-    List<String> membersList = Provider.of<States>(context).membersList;
-    Function addMember = Provider.of<States>(context).addMember;
-    Function updateMember = Provider.of<States>(context).updateMember;
-    Function deleteMember = Provider.of<States>(context).deleteMember;
-    Function clearMembers = Provider.of<States>(context).clearMembers;
+    List<String> currentProjectLinks = Provider.of<ProjectStates>(context).currentProjectLinks;
+    Function addProjectLink = Provider.of<ProjectStates>(context).addProjectLink;
+    Function updateProjectLink = Provider.of<ProjectStates>(context).updateProjectLink;
+    Function deleteProjectLink = Provider.of<ProjectStates>(context).deleteProjectLink;
 
-    List<String> linksList = Provider.of<States>(context).linksList;
-    Function addLink = Provider.of<States>(context).addLink;
-    Function updateLink = Provider.of<States>(context).updateLink;
-    Function deleteLink = Provider.of<States>(context).deleteLink;
-    Function clearLinks = Provider.of<States>(context).clearLinks;
+    void deleteProject(int id) async {
+      await Services().deleteProject(id).then((res) => {
+        if (res["statusCode"] == 204){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Proje Başarıyla Silindi"))),
+            setIndexContent(0),
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res["errorMessage"])))
+          }
+      });
+    }
 
-    List<Paragraph> paragraphsList = Provider.of<States>(context).paragraphsList;
-    Function clearParagraphs = Provider.of<States>(context).clearParagraphs;
+    void updateProject(Project project, int id) async {
+      await Services().updateProject(project, id).then((res) => {
+        if (res.runtimeType == Project){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Proje Başarıyla Güncellendi"))),
+            setIndexContent(2),
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res["errorMessage"]))),
+          }
+      });
+    }
 
-    Function setIndexContent = Provider.of<States>(context).setIndexContent;*/
-    double width = MediaQuery.of(context).size.width;
-
-    Future<void> _memberDialog(BuildContext context, String memberName, int index) {
+    Future<void> memberDialog(BuildContext context, String memberName, int index) {
       memberNameController.text = memberName;
       return showDialog<void>(
         context: context,
@@ -58,7 +84,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               children: [
                 IconButton(onPressed: ()=>{Navigator.of(context).pop()}, icon: const Icon(Icons.arrow_back)),
                 const Text('Üye Ekle/Düzenle'),
-                IconButton(onPressed: ()=>{/*deleteMember(memberNameController.text),*/ Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
+                IconButton(onPressed: ()=>{deleteProjectMember(memberNameController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
             content: TextFormField(controller: memberNameController,),
@@ -66,7 +92,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               TextButton(
                 child: Text('Ekle/Düzenle', style: TextStyle(color: isDark ? null : Colors.deepPurple[800]),),
                 onPressed: () {
-                  /*memberName == "" ? addMember(memberNameController.text) : updateMember(memberNameController.text, index);*/
+                  memberName == "" ? addProjectMember(memberNameController.text) : updateProjectMember(memberNameController.text, index);
                   Navigator.of(context).pop();
                 },
               ),
@@ -75,7 +101,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
         },
       );
     }
-    Future<void> _linkDialog(BuildContext context, String link, int index) {
+    Future<void> linkDialog(BuildContext context, String link, int index) {
       linkController.text = link;
       return showDialog<void>(
         context: context,
@@ -86,7 +112,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               children: [
                 IconButton(onPressed: ()=>{Navigator.of(context).pop()}, icon: const Icon(Icons.arrow_back)),
                 const Text('Link Ekle/Düzenle'),
-                IconButton(onPressed: ()=>{/*deleteLink(linkController.text),*/ Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
+                IconButton(onPressed: ()=>{deleteProjectLink(linkController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
             content: TextFormField(controller: linkController,),
@@ -94,7 +120,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               TextButton(
                 child: Text('Ekle/Düzenle', style: TextStyle(color: isDark ? null : Colors.deepPurple[800]),),
                 onPressed: () {
-                 /* link == "" ? addLink(linkController.text) : updateLink(linkController.text, index);*/
+                  link == "" ? addProjectLink(linkController.text) : updateProjectLink(linkController.text, index);
                   Navigator.of(context).pop();
                 },
               ),
@@ -104,19 +130,26 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
       );
     }
 
-/*    late Project newProject = Project(
-      id: 0,  // id gönderilmeyecek
-      userID: 0,  //localde login olmuş user id si göndeirlicek
-      projectName: "",
-      projectType: "",
-      projectTitle: "",
-      introImg: "",
-      projectIntro: "",
-      paragraphs: [],
-      medias: Medias(),
-      members: [],
-      links: [],
-    );*/
+    Future<void> sureCheckDialog(BuildContext context, int id) {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Silmek İstediğine Emin Misin?'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => {Navigator.of(context).pop()},
+                  child:
+                  const Text('Hayır', style: TextStyle(color: Colors.red))),
+              TextButton(
+                  onPressed: () =>
+                  {deleteProject(id), Navigator.of(context).pop()},
+                  child: const Text('Evet,eminim.')),
+            ],
+          );
+        },
+      );
+    }
 
     return ListView(
       children: [
@@ -124,14 +157,11 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => {/*setIndexContent(1)*/},
+                onPressed: () => {setIndexContent(2)},
                 icon: const Icon(Icons.arrow_back)),
             const Text('Proje Düzenle: '),
             IconButton(
-                onPressed: () => {
-                  /*deleteParagraph1(currentParagraph),
-                      setIndexContent(1)*/
-                },
+                onPressed: () => {sureCheckDialog(context, currentProject.id)},
                 icon: const Icon(Icons.delete)),
           ],
         ),
@@ -180,8 +210,11 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           children: [
             const Text('Paragraflar'),
             InkWell(
-              onTap: () =>
-              {/*setCurrentParagraph(paragraphInstance), setIndexContent(6)*/},
+              onTap: () => {
+                setCurrentParagraph(paragraphInstance),
+                setIndexContent(6),
+                setLastIndexContent(10)
+              },
               child: const Row(
                 children: [
                   Text('Paragraf Ekle'),
@@ -191,31 +224,29 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
             )
           ],
         ),
-        /*GridView.builder(
+        GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            crossAxisCount: (width < 1060
-                ? (width < 800 ? (width < 650 ? 2 : 4) : 6)
-                : 8),
-          ),
-          itemCount: paragraphsList.length,
+            crossAxisCount: (width < 1060 ? (width < 800 ? (width < 650 ? 2 : 4) : 6) : 8)),
+          itemCount: currentProject.paragraphs.length,
           itemBuilder: (BuildContext context, int index) {
             return ImageCard(() => {
-              setCurrentParagraph(paragraphsList[index]),
-              setCurrentIndex(index),
+              setCurrentParagraph(currentProject.paragraphs[index]),
+              setCurrentParagraphIndex(index),
               setIndexContent(7),
+              setLastIndexContent(10)
             });
           },
-        ),*/
+        ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Üyeler'),
             InkWell(
-              onTap: () => {_memberDialog(context, "",0)},
+              onTap: () => {memberDialog(context, "",0)},
               child: const Row(
                 children: [
                   Text('Üye Ekle'),
@@ -225,37 +256,31 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
             )
           ],
         ),
-        /*GridView.builder(
+        GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
-            crossAxisCount: (width < 1060
-                ? (width < 800 ? (width < 650 ? 5 : 5) : 10)
-                : 15),
-          ),
-          itemCount: membersList.length,
+            crossAxisCount: (width < 1060 ? (width < 800 ? (width < 650 ? 5 : 5) : 10) : 15)),
+          itemCount: currentProjectMembers.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: ()=>{_memberDialog(context, membersList[index], index)},
+              onTap: ()=>{memberDialog(context, currentProjectMembers[index], index)},
               child: Chip(
-                label: Text(membersList[index]),
-                labelStyle: const TextStyle(
-                    overflow: TextOverflow.ellipsis
-                ),
+                label: Text(currentProjectMembers[index]),
+                labelStyle: const TextStyle(overflow: TextOverflow.ellipsis),
                 clipBehavior: Clip.none,
-
               ),
             );
           },
-        ),*/
+        ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Linkler'),
             InkWell(
-              onTap: () => {_linkDialog(context, "",0)},
+              onTap: () => {linkDialog(context, "",0)},
               child: const Row(
                 children: [
                   Text('Link Ekle'),
@@ -265,54 +290,30 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
             )
           ],
         ),
-        /*GridView.builder(
+        GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
-            crossAxisCount: (width < 1060
-                ? (width < 800 ? (width < 650 ? 5 : 5) : 10)
-                : 15),
-          ),
-          itemCount: linksList.length,
+            crossAxisCount: (width < 1060 ? (width < 800 ? (width < 650 ? 5 : 5) : 10) : 15)),
+          itemCount: currentProjectLinks.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: ()=>{_linkDialog(context, linksList[index], index)},
+              onTap: ()=>{linkDialog(context, currentProjectLinks[index], index)},
               child: Chip(
-                label: Text(linksList[index]),
-                labelStyle: const TextStyle(
-                    overflow: TextOverflow.ellipsis
-                ),
+                label: Text(currentProjectLinks[index]),
+                labelStyle: const TextStyle(overflow: TextOverflow.ellipsis),
                 clipBehavior: Clip.none,
-
               ),
             );
           },
-        ),*/
+        ),
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () => {
-            /*newProject.userID = 0, //localde login olmuş user id si göndeirlicek
-            newProject.projectName = projectNameController.text,
-            newProject.projectType = projectTypeController.text,
-            newProject.projectTitle = projectTitleController.text,
-            newProject.introImg = projectIntroImageController.text,
-            newProject.projectIntro = projectIntroTextController.text,
-            newProject.paragraphs = paragraphsList,
-            newProject.medias = Medias(videos: [], images: []),
-            newProject.members = membersList,
-            newProject.links = linksList,
-            addProject(newProject),
-            setIndexContent(2),
-            //Sayfadan çıktıktna sonra içeriğini temizleme
-            projectNameController.text = "",
-            projectTypeController.text = "",
-            projectTitleController.text = "",
-            projectIntroImageController.text = "",
-            projectIntroTextController.text = "",
-            clearParagraphs(),
-            clearMembers(),
-            clearLinks(),*/
+            currentProject.members = currentProjectMembers,
+            currentProject.links = currentProjectLinks,
+            updateProject(currentProject, currentProject.id),
           },
           child: const Text('Projeyi Oluştur'),
         ),

@@ -1,8 +1,9 @@
-import 'package:admin_client_portfolio/models/paragraph_model.dart';
-import 'package:admin_client_portfolio/states/States.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/paragraph_model.dart';
+import '../../states/States.dart';
 import '../../states/post_provider.dart';
 
 class CreateParagraph1 extends StatefulWidget {
@@ -37,7 +38,7 @@ class _CreateParagraph1State extends State<CreateParagraph1> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => {setIndexContent(1)},
+                onPressed: () => {setIndexContent(lastIndexContent)},
                 icon: const Icon(Icons.arrow_back)),
             const Text('Paragraf Oluştur: '),
             const SizedBox(),

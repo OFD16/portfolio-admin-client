@@ -1,7 +1,10 @@
-import 'package:admin_client_portfolio/models/paragraph_model.dart';
-import 'package:admin_client_portfolio/states/States.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/paragraph_model.dart';
+import '../../states/States.dart';
+import '../../states/project_provider.dart';
 
 class EditParagraph extends StatefulWidget {
   const EditParagraph({Key? key}) : super(key: key);
@@ -13,26 +16,21 @@ class EditParagraph extends StatefulWidget {
 class _EditParagraphState extends State<EditParagraph> {
   @override
   Widget build(BuildContext context) {
-    int paragraphIndex = Provider.of<States>(context).paragraphIndex;
-    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
-    Function updateParagraph = Provider.of<States>(context).updateParagraph;
-    Function deleteParagraph = Provider.of<States>(context).deleteParagraph;
+    int lastIndexContent = Provider.of<States>(context).lastIndexContent;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
-    TextEditingController firstVideoLinkC =
-        TextEditingController(text: currentParagraph.firstVideo);
-    TextEditingController firstImgLinkC =
-        TextEditingController(text: currentParagraph.firstImg);
-    TextEditingController leftImgLinkC =
-        TextEditingController(text: currentParagraph.leftImg);
-    TextEditingController paragraphC =
-        TextEditingController(text: currentParagraph.paragraph);
-    TextEditingController rightImgLinkC =
-        TextEditingController(text: currentParagraph.rightImg);
-    TextEditingController lastImgLinkC =
-        TextEditingController(text: currentParagraph.lastImg);
-    TextEditingController lastVideoLinkC =
-        TextEditingController(text: currentParagraph.lastVideo);
+    Paragraph currentParagraph = Provider.of<ProjectStates>(context).currentParagraph;
+    int paragraphIndex = Provider.of<ProjectStates>(context).paragraphIndex;
+    Function updateParagraphTOProject = Provider.of<ProjectStates>(context).updateParagraphTOProject;
+    Function deleteParagraphTOProject = Provider.of<ProjectStates>(context).deleteParagraphTOProject;
+
+    TextEditingController firstVideoLinkC = TextEditingController(text: currentParagraph.firstVideo);
+    TextEditingController firstImgLinkC = TextEditingController(text: currentParagraph.firstImg);
+    TextEditingController leftImgLinkC = TextEditingController(text: currentParagraph.leftImg);
+    TextEditingController paragraphC = TextEditingController(text: currentParagraph.paragraph);
+    TextEditingController rightImgLinkC = TextEditingController(text: currentParagraph.rightImg);
+    TextEditingController lastImgLinkC = TextEditingController(text: currentParagraph.lastImg);
+    TextEditingController lastVideoLinkC = TextEditingController(text: currentParagraph.lastVideo);
 
     return ListView(
       children: [
@@ -40,12 +38,12 @@ class _EditParagraphState extends State<EditParagraph> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                onPressed: () => {setIndexContent(3)},
+                onPressed: () => {setIndexContent(lastIndexContent)},
                 icon: const Icon(Icons.arrow_back)),
             const Text('Paragraf Düzenle: '),
             IconButton(
                 onPressed: () => {
-                  deleteParagraph(currentParagraph),
+                  deleteParagraphTOProject(currentParagraph),
                   setIndexContent(3)
                 },
                 icon: const Icon(Icons.delete)),
@@ -118,8 +116,8 @@ class _EditParagraphState extends State<EditParagraph> {
             currentParagraph.rightImg = rightImgLinkC.text,
             currentParagraph.lastImg = lastImgLinkC.text,
             currentParagraph.lastVideo = lastVideoLinkC.text,
-            updateParagraph(currentParagraph, paragraphIndex),
-            setIndexContent(3),
+            updateParagraphTOProject(currentParagraph, paragraphIndex),
+            setIndexContent(lastIndexContent),
           },
           child: const Text('Onayla'),
         ),

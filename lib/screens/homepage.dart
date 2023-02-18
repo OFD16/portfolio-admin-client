@@ -24,18 +24,18 @@ class HomePage extends StatefulWidget {
 }
 
 List<Widget> contents = const [
-  PostPage(),                 //0
-  CreatePostPage(),           //1
-  ProjectPage(),              //2
-  CreateProjectPage(),        //3
+  PostPage(),                 //0  Post Listeleme
+  CreatePostPage(),           //1  Post Oluşturma
+  ProjectPage(),              //2  Projeleri Listeleme
+  CreateProjectPage(),        //3  Proje Oluşturma
   AboutPage(),                //4
   ProfilePage(),              //5
-  CreateParagraph(),          //6
-  EditParagraph(),            //7
-  CreateParagraph1(),         //8
-  EditParagraph1(),           //9
-  ProjectDetailPage(),        //10
-  PostDetailPage(),           //11
+  CreateParagraph(),          //6  Proje Paragraf Oluşturma
+  EditParagraph(),            //7  Proje Paragraf Edit
+  CreateParagraph1(),         //8  Post Paragraf Oluşturma
+  EditParagraph1(),           //9  Post Paragraf Edit
+  ProjectDetailPage(),        //10 Proje Detay Edit
+  PostDetailPage(),           //11 Post Detay Edit
 ];
 
 class _HomePageState extends State<HomePage> {

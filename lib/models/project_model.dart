@@ -3,7 +3,7 @@ import 'package:admin_client_portfolio/models/medias_model.dart';
 import 'package:admin_client_portfolio/models/paragraph_model.dart';
 
 class Project {
-  int? id;
+  int id;
   int userID;
   String projectName;
   String projectType;
@@ -20,7 +20,7 @@ class Project {
 
   Project(
       {
-        this.id,
+        required this.id,
         required this.userID,
         required this.projectName,
         required this.projectType,
@@ -36,7 +36,7 @@ class Project {
 });
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-    id: json["id"] as int?,
+    id: json["id"] as int,
     userID: json["user_id"] as int,
     projectName: json["project_name"] as String,
     projectType: json["project_type"] as String,
@@ -45,8 +45,8 @@ class Project {
     projectIntro: json["project_intro"] as String,
     paragraphs: (json["paragraphs"] as List).map((item) => Paragraph.fromJson(item)).toList(),
     medias: json["medias"] == null ? null : Medias.fromJson(json["medias"] as Map<String, dynamic>),
-    members: (json["links"] is List<dynamic>)
-        ? (json["links"] as List<dynamic>).map((e) => e.toString()).toList()
+    members: (json["members"] is List<dynamic>)
+        ? (json["members"] as List<dynamic>).map((e) => e.toString()).toList()
         : [],
     links: (json["links"] is List<dynamic>)
         ? (json["links"] as List<dynamic>).map((e) => e.toString()).toList()

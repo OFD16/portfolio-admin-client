@@ -3,6 +3,7 @@ import 'package:admin_client_portfolio/models/paragraph_model.dart';
 import 'package:admin_client_portfolio/models/project_model.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
+import 'package:admin_client_portfolio/states/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,6 @@ final TextEditingController projectTypeController = TextEditingController();
 final TextEditingController projectTitleController = TextEditingController();
 final TextEditingController projectIntroTextController = TextEditingController();
 final TextEditingController projectIntroImageController = TextEditingController();
-
 final TextEditingController memberNameController = TextEditingController();
 final TextEditingController linkController = TextEditingController();
 
@@ -40,40 +40,41 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     localUser = await LocalUserData().getLocalUser();
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
-    Function setCurrentParagraph = Provider.of<States>(context).setCurrentParagraph;
-    Function setCurrentIndex = Provider.of<States>(context).setCurrentParagraphIndex;
+    double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
+    Function setLastIndexContent = Provider.of<States>(context).setLastIndexContent;
+
+    List<Paragraph> paragraphsList = Provider.of<ProjectStates>(context).paragraphsList;
+    Function clearParagraphs = Provider.of<ProjectStates>(context).clearParagraphs;
+    Function setCurrentParagraph = Provider.of<ProjectStates>(context).setCurrentParagraph;
+    Function setCurrentIndex = Provider.of<ProjectStates>(context).setCurrentIndexC;
     Paragraph paragraphInstance = Paragraph();
 
-    /*Function addProject = Provider.of<States>(context).addProject;*/
+    List<String> membersList = Provider.of<ProjectStates>(context).currentProjectMembers;
+    Function addMember = Provider.of<ProjectStates>(context).addProjectMember;
+    Function updateMember = Provider.of<ProjectStates>(context).updateProjectMember;
+    Function deleteMember = Provider.of<ProjectStates>(context).deleteProjectMember;
+    Function clearMembers = Provider.of<ProjectStates>(context).clearProjectMembers;
 
-    List<String> membersList = Provider.of<States>(context).membersList;
-    Function addMember = Provider.of<States>(context).addMember;
-    Function updateMember = Provider.of<States>(context).updateMember;
-    Function deleteMember = Provider.of<States>(context).deleteMember;
-    Function clearMembers = Provider.of<States>(context).clearMembers;
+    List<String> linksList = Provider.of<ProjectStates>(context).currentProjectLinks;
+    Function addLink = Provider.of<ProjectStates>(context).addProjectLink;
+    Function updateLink = Provider.of<ProjectStates>(context).updateProjectLink;
+    Function deleteLink = Provider.of<ProjectStates>(context).deleteProjectLink;
+    Function clearLinks = Provider.of<ProjectStates>(context).clearProjectLinks;
 
-    List<String> linksList = Provider.of<States>(context).linksList;
-    Function addLink = Provider.of<States>(context).addLink;
-    Function updateLink = Provider.of<States>(context).updateLink;
-    Function deleteLink = Provider.of<States>(context).deleteLink;
-    Function clearLinks = Provider.of<States>(context).clearLinks;
+    Project newProject = Project(id: 0,userID: 0, projectName: "", projectType: "", projectTitle: "", introImg: "", projectIntro: "", paragraphs: [], medias: Medias(images: [], videos: []), members: [], links: []);
 
-    List<Paragraph> paragraphsList = Provider.of<States>(context).paragraphsList;
-    Function clearParagraphs = Provider.of<States>(context).clearParagraphs;
-
-    Function setIndexContent = Provider.of<States>(context).setIndexContent;
-    double width = MediaQuery.of(context).size.width;
-
-    Project newProject = Project(userID: 0, projectName: "", projectType: "", projectTitle: "", introImg: "", projectIntro: "", paragraphs: [], medias: Medias(images: [], videos: []), members: [], links: []);
     void createProject (Project project) async {
       await Services().createProject(project).then((res) => {
         if(newProject.userID == res.userID){
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Proje Başarıyla Oluşturuldu"))),
-          setIndexContent(0),
-          //Sayfadan çıktıktna sonra içeriğini temizleme
+          setIndexContent(2),
+
+          ///Sayfadan çıktıktan sonra içeriğini temizleme
           projectNameController.text = "",
           projectTypeController.text = "",
           projectTitleController.text = "",
@@ -102,7 +103,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 IconButton(onPressed: ()=>{deleteMember(memberNameController.text), Navigator.of(context).pop()}, icon: const Icon(Icons.delete)),
               ],
             ),
-            content: TextFormField(controller: memberNameController,),
+            content: TextFormField(controller: memberNameController),
             actions: <Widget>[
               TextButton(
                 child: Text('Ekle/Düzenle', style: TextStyle(color: isDark ? null : Colors.deepPurple[800]),),
@@ -193,7 +194,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             const Text('Paragraflar'),
             InkWell(
               onTap: () =>
-                  {setCurrentParagraph(paragraphInstance), setIndexContent(6)},
+                  {setCurrentParagraph(paragraphInstance),setLastIndexContent(3), setIndexContent(6)},
               child: const Row(
                 children: [
                   Text('Paragraf Ekle'),
@@ -251,12 +252,9 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
             return InkWell(
               onTap: ()=>{memberDialog(context, membersList[index], index)},
               child: Chip(
-                  label: Text(membersList[index]),
-                labelStyle: const TextStyle(
-                  overflow: TextOverflow.ellipsis
-                ),
+                label: Text(membersList[index]),
+                labelStyle: const TextStyle(overflow: TextOverflow.ellipsis),
                 clipBehavior: Clip.none,
-
               ),
             );
           },
@@ -292,9 +290,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
               onTap: ()=>{linkDialog(context, linksList[index], index)},
               child: Chip(
                 label: Text(linksList[index]),
-                labelStyle: const TextStyle(
-                    overflow: TextOverflow.ellipsis
-                ),
+                labelStyle: const TextStyle(overflow: TextOverflow.ellipsis),
                 clipBehavior: Clip.none,
 
               ),

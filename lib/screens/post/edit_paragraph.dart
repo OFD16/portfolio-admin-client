@@ -24,20 +24,13 @@ class _EditParagraph1State extends State<EditParagraph1> {
     Function deleteParagraphTOPost = Provider.of<PostStates>(context).deleteParagraphTOPost;
 
 
-    TextEditingController firstVideoLinkC =
-        TextEditingController(text: currentParagraph.firstVideo);
-    TextEditingController firstImgLinkC =
-        TextEditingController(text: currentParagraph.firstImg);
-    TextEditingController leftImgLinkC =
-        TextEditingController(text: currentParagraph.leftImg);
-    TextEditingController paragraphC =
-        TextEditingController(text: currentParagraph.paragraph);
-    TextEditingController rightImgLinkC =
-        TextEditingController(text: currentParagraph.rightImg);
-    TextEditingController lastImgLinkC =
-        TextEditingController(text: currentParagraph.lastImg);
-    TextEditingController lastVideoLinkC =
-        TextEditingController(text: currentParagraph.lastVideo);
+    TextEditingController firstVideoLinkC = TextEditingController(text: currentParagraph.firstVideo);
+    TextEditingController firstImgLinkC = TextEditingController(text: currentParagraph.firstImg);
+    TextEditingController leftImgLinkC = TextEditingController(text: currentParagraph.leftImg);
+    TextEditingController paragraphC = TextEditingController(text: currentParagraph.paragraph);
+    TextEditingController rightImgLinkC = TextEditingController(text: currentParagraph.rightImg);
+    TextEditingController lastImgLinkC = TextEditingController(text: currentParagraph.lastImg);
+    TextEditingController lastVideoLinkC = TextEditingController(text: currentParagraph.lastVideo);
 
     return ListView(
       children: [

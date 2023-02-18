@@ -136,7 +136,7 @@ class Services {
     }
   }
 
-  Future<Project> updateProject(Project project, int id) async {
+  Future updateProject(Project project, int id) async {
     var headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     var url = Uri.parse('${baseUrl}projects/$id');
     http.Response res = await http.patch(url, body: json.encode(project.toJson()), headers: headers);

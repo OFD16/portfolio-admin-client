@@ -20,8 +20,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           IconButton(
             icon: themeNotifier.isDark
-                ? Icon(Icons.dark_mode)
-                : Icon(Icons.sunny),
+                ? const Icon(Icons.dark_mode)
+                : const Icon(Icons.sunny),
             onPressed: () => {
               themeNotifier.isDark
                   ? themeNotifier.isDark = false

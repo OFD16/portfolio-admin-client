@@ -18,6 +18,16 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
+
+    bool isUrl(String urlString) {
+      try {
+        Uri uri = Uri.parse(urlString);
+        return uri.isAbsolute;
+      } catch (e) {
+        return false;
+      }
+    }
+    bool isValidUrl = isUrl(widget.image);  // returns true
     return InkWell(
       onTap: widget.onTap,
       child: Container(
@@ -32,7 +42,7 @@ class _PostCardState extends State<PostCard> {
               flex: 8,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(9), // Image border
-                child: Image.network(widget.image == null ? widget.image : "https://cdn-icons-png.flaticon.com/512/4661/4661361.png", fit: BoxFit.cover),
+                child: Image.network(isValidUrl ? widget.image : "https://cdn.pixabay.com/photo/2016/07/16/22/51/abstract-1522884_960_720.jpg", fit: BoxFit.cover),
               ),
             ),
             Expanded(
