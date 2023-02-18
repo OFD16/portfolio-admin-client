@@ -9,9 +9,7 @@ class LocalUserData {
 
   setLocalUser(User newUser) async {
     String jsonUser = json.encode(newUser.toJson());
-    print('newUser: ${newUser.id}');
     States().setLocalUser(newUser);
-    print('stateUser: ${States().localUserData.id}');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(_localUserDataKey, jsonUser);
   }

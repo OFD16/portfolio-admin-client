@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   bool login = false;
 
   Future getIsLogin()async{
+    LoginValue().setLoginTime(); //set login time
     bool isLogin = await LoginValue().getLoginValue();
     setState(() {
       login = isLogin;

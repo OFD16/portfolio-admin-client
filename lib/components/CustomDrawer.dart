@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:admin_client_portfolio/states/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +41,24 @@ List items = <Map<String, dynamic>>[
 ];
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  @override
+  void initState() {
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      String lastLoginTimeStr = await LoginValue().getLoginTime() as String;
+      DateTime lastLoginTime = DateTime.parse(lastLoginTimeStr);
+
+      // Check if 24 hours have elapsed
+      Duration elapsed = DateTime.now().difference(lastLoginTime);
+      if (elapsed.inHours >= 23) {
+        LoginValue().setLoginValue(false);
+        LocalUserData().setLocalUser(User(id: 0, firstName: '', lastName: '', age: 0, email: '', userImg: '', introduction: '', markedProjects: [], markedBlogs: [], role: ''));
+        Navigator.pushReplacementNamed(context, 'login_view');
+        // Cancel the timer
+        timer.cancel();
+      }
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     int indexContent = Provider.of<States>(context).indexContent;
@@ -132,8 +152,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       () => {
                         LoginValue().setLoginValue(false),
                         LocalUserData().setLocalUser(User(id: 0, firstName: '', lastName: '', age: 0, email: '', userImg: '', introduction: '', markedProjects: [], markedBlogs: [], role: '')),
-                            Navigator.pushReplacementNamed(
-                                context, 'login_view')
+                            Navigator.pushReplacementNamed(context, 'login_view')
                           }, false),
                 ],
               )));
