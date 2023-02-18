@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../components/Cards/PostCard.dart';
 import '../../models/post_model.dart';
+import '../../models/user_model.dart';
 import '../../services/services.dart';
+import '../../sharedPreferences/localUser.dart';
 import '../../states/States.dart';
 import '../../states/post_provider.dart';
 
@@ -18,10 +20,28 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   List<Post> blogsList = [];
 
+  User localUser = User(
+      id: 0,
+      firstName: "",
+      lastName: "",
+      age: 0,
+      email: "",
+      userImg: "",
+      introduction: "",
+      markedProjects: [],
+      markedBlogs: [],
+      role: "");
+
   @override
   void initState() {
     getBlogs();
+    _loadLocalUser();
     super.initState();
+  }
+
+  void _loadLocalUser() async {
+    localUser = await LocalUserData().getLocalUser();
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -53,6 +73,7 @@ class _PostPageState extends State<PostPage> {
 
   void getBlogs () async {
     List<Post> lists = await Services().getBlogs();
-    blogsList = lists;
+    List<Post> filteredLists = lists.where((item) => item.postOwner == localUser.id).toList();
+    blogsList = filteredLists;
   }
 }

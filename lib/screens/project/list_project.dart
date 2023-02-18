@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 
 import '../../components/Cards/PostCard.dart';
 import '../../models/project_model.dart';
+import '../../models/user_model.dart';
 import '../../services/services.dart';
+import '../../sharedPreferences/localUser.dart';
 import '../../states/States.dart';
 import '../../states/project_provider.dart';
 
@@ -19,11 +21,28 @@ class ProjectPage extends StatefulWidget {
 class _ProjectPageState extends State<ProjectPage> {
   List<Project> projectList = [];
 
+  User localUser = User(
+      id: 0,
+      firstName: "",
+      lastName: "",
+      age: 0,
+      email: "",
+      userImg: "",
+      introduction: "",
+      markedProjects: [],
+      markedBlogs: [],
+      role: "");
   @override
   void initState() {
     getProjects();
+    _loadLocalUser();
     super.initState();
   }
+  void _loadLocalUser() async {
+    localUser = await LocalUserData().getLocalUser();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -56,6 +75,7 @@ class _ProjectPageState extends State<ProjectPage> {
 
   void getProjects () async {
     List<Project> lists = await Services().getProjects();
-    projectList = lists;
+    List<Project> filteredLists = lists.where((item) => item.userID == localUser.id).toList();
+    projectList = filteredLists;
   }
 }
