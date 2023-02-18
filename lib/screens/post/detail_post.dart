@@ -7,6 +7,7 @@ import '../../models/paragraph_model.dart';
 import '../../models/post_model.dart';
 import '../../states/States.dart';
 import '../../states/ThemeModel.dart';
+import '../../states/post_provider.dart';
 
 class PostDetailPage extends StatefulWidget {
   const PostDetailPage({Key? key}) : super(key: key);
@@ -20,10 +21,6 @@ final TextEditingController linkController = TextEditingController();
 class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     bool isDark = Provider.of<ModelTheme>(context).isDark;
@@ -31,8 +28,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
     Function setLastIndexContent =
         Provider.of<States>(context).setLastIndexContent;
 
-    Post currentPost = Provider.of<States>(context).currentPost;
-    List<String> currentPostLinks = Provider.of<States>(context).currentPostLinks;
+    Post currentPost = Provider.of<PostStates>(context).currentPost;
+    List<String> currentPostLinks = Provider.of<PostStates>(context).currentPostLinks;
 
     final TextEditingController postNameController =
         TextEditingController(text: currentPost.postName);
@@ -47,14 +44,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
     // en son postun link lsitesini düzenlemede kaldım
 
     Function setCurrentParagraph =
-        Provider.of<States>(context).setCurrentParagraph;
+        Provider.of<PostStates>(context).setCurrentParagraph;
     Function setCurrentParagraphIndex =
-        Provider.of<States>(context).setCurrentParagraphIndex;
+        Provider.of<PostStates>(context).setCurrentParagraphIndex;
     Paragraph paragraphInstance = Paragraph();
 
-    Function addPostLink = Provider.of<States>(context).addPostLink;
-    Function updatePostLink = Provider.of<States>(context).updatePostLink;
-    Function deletePostLink = Provider.of<States>(context).deletePostLink;
+    Function addPostLink = Provider.of<PostStates>(context).addPostLink;
+    Function updatePostLink = Provider.of<PostStates>(context).updatePostLink;
+    Function deletePostLink = Provider.of<PostStates>(context).deletePostLink;
 
     void deleteBlog(int id) async {
       await Services().deleteBlog(id).then((res) => {
@@ -164,7 +161,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             const Text('Blog Düzenle: '),
             IconButton(
                 onPressed: () => {
-                      sureCheckDialog(context, currentPost.id!),
+                      sureCheckDialog(context, currentPost.id),
                     },
                 icon: const Icon(Icons.delete)),
           ],

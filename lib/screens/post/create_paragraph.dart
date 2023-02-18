@@ -3,6 +3,8 @@ import 'package:admin_client_portfolio/states/States.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../states/post_provider.dart';
+
 class CreateParagraph1 extends StatefulWidget {
   const CreateParagraph1({Key? key}) : super(key: key);
 
@@ -16,10 +18,10 @@ class _CreateParagraph1State extends State<CreateParagraph1> {
     int lastIndexContent = Provider.of<States>(context).lastIndexContent;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
-    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
+    Paragraph currentParagraph = Provider.of<PostStates>(context).currentParagraph;
 
-    Function addParagraphTOPost = Provider.of<States>(context).addParagraphTOPost;
-    Function addParagraph1 = Provider.of<States>(context).addParagraph1;
+    Function addParagraphTOPost = Provider.of<PostStates>(context).addParagraphTOPost;
+    Function addParagraph = Provider.of<PostStates>(context).addParagraph;
 
     TextEditingController firstVideoLinkC = TextEditingController(text: currentParagraph.firstVideo);
     TextEditingController firstImgLinkC = TextEditingController(text: currentParagraph.firstImg);
@@ -108,7 +110,7 @@ class _CreateParagraph1State extends State<CreateParagraph1> {
             currentParagraph.rightImg = rightImgLinkC.text,
             currentParagraph.lastImg = lastImgLinkC.text,
             currentParagraph.lastVideo = lastVideoLinkC.text,
-            lastIndexContent == 11 ? addParagraphTOPost(currentParagraph) : addParagraph1(currentParagraph),
+            lastIndexContent == 11 ? addParagraphTOPost(currentParagraph) : addParagraph(currentParagraph),
             lastIndexContent == 11 ? setIndexContent(11) : setIndexContent(1),
           },
           child: const Text('Onayla'),

@@ -3,6 +3,8 @@ import 'package:admin_client_portfolio/states/States.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../states/post_provider.dart';
+
 class EditParagraph1 extends StatefulWidget {
   const EditParagraph1({Key? key}) : super(key: key);
 
@@ -16,10 +18,10 @@ class _EditParagraph1State extends State<EditParagraph1> {
     int lastIndexContent = Provider.of<States>(context).lastIndexContent;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
-    Paragraph currentParagraph = Provider.of<States>(context).currentParagraph;
-    int paragraphIndex = Provider.of<States>(context).paragraphIndex;
-    Function updateParagraphTOPost = Provider.of<States>(context).updateParagraphTOPost;
-    Function deleteParagraphTOPost = Provider.of<States>(context).deleteParagraphTOPost;
+    Paragraph currentParagraph = Provider.of<PostStates>(context).currentParagraph;
+    int paragraphIndex = Provider.of<PostStates>(context).paragraphIndex;
+    Function updateParagraphTOPost = Provider.of<PostStates>(context).updateParagraphTOPost;
+    Function deleteParagraphTOPost = Provider.of<PostStates>(context).deleteParagraphTOPost;
 
 
     TextEditingController firstVideoLinkC =
@@ -49,7 +51,6 @@ class _EditParagraph1State extends State<EditParagraph1> {
             IconButton(
                 onPressed: () => {
                   deleteParagraphTOPost(currentParagraph),
-                  print('son sayfa: $lastIndexContent'),
                   setIndexContent(lastIndexContent),
                 },
                 icon: const Icon(Icons.delete)),

@@ -5,6 +5,8 @@ import 'package:admin_client_portfolio/sharedPreferences/localLogin.dart';
 import 'package:admin_client_portfolio/states/States.dart';
 import 'package:admin_client_portfolio/states/ThemeModel.dart';
 import 'package:admin_client_portfolio/states/experience_provider.dart';
+import 'package:admin_client_portfolio/states/post_provider.dart';
+import 'package:admin_client_portfolio/states/project_provider.dart';
 import 'package:admin_client_portfolio/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +44,8 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider<States>(create: (_) => States()),
         ChangeNotifierProvider<ModelTheme>(create: (_) => ModelTheme()),
+        ChangeNotifierProvider<PostStates>(create: (_) => PostStates()),
+        ChangeNotifierProvider<ProjectStates>(create: (_) => ProjectStates()),
         ChangeNotifierProvider<ExperienceProvider>(create: (_) => ExperienceProvider())
       ],
       child: Consumer<ModelTheme>(
