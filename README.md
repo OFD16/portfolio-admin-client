@@ -1,16 +1,21 @@
-# admin_client_portfolio
 
-A new Flutter project.
+# Portfolio Admin Client
 
-## Getting Started
+Portfolio Admin Client Project: A streamlined and user-friendly web application that empowers clients to manage and track their investment portfolios with ease. This secure platform offers real-time data visualization, portfolio analytics, and intuitive tools to make informed financial decisions. Enhance your financial journey with our Portfolio Admin Client Project.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Authors
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [@OFD16](https://github.com/OFD16)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [@furkancvk](https://github.com/furkancvk)
+
+## Tech Stack
+
+**Client:** Dart, Flutter 
+
+**Backend:** Node.js, Express.js, Firebase
+
+**Database** PostgreSQL
+
+
